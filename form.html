@@ -59,6 +59,70 @@
                 </p>
             </fieldset>
 
+            <fieldset>
+                <legend>Деталі запису</legend>
+
+                <p>
+                    <label for="topic">Тема майстер-класу</label><br>
+                    <select id="topic" name="topic">
+                        <option value="">— оберіть —</option>
+                        <option value="borscht">Борщ та перші страви</option>
+                        <option value="baking">Випічка та десерти</option>
+                        <option value="pasta">Паста та італійська кухня</option>
+                        <option value="asian">Азійська кухня</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="participants">Кількість учасників</label><br>
+                    <input type="number" id="participants" name="participants" value="1">
+                </p>
+
+                <p>
+                    <label for="bookingCode">Код бронювання</label><br>
+                    <input type="text" id="bookingCode" name="bookingCode"
+                        placeholder="MK-2026-0007">
+                </p>
+
+                <fieldset>
+                    <legend>Рівень підготовки</legend>
+
+                    <label><input type="radio" name="level" value="beginner" checked> Початківець</label><br>
+                    <label><input type="radio" name="level" value="intermediate"> Середній</label><br>
+                    <label><input type="radio" name="level" value="advanced"> Просунутий</label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Додаткові побажання</legend>
+
+                    <label><input type="checkbox" name="extras" value="ingredients"> Потрібен набір інгредієнтів</label><br>
+                    <label><input type="checkbox" name="extras" value="vegan"> Веганське меню</label><br>
+                    <label><input type="checkbox" name="extras" value="glutenfree"> Безглютенова дієта</label>
+                </fieldset>
+            </fieldset>
+
+            <fieldset>
+                <legend>Додатково</legend>
+
+                <p>
+                    <label for="comment">Коментар</label><br>
+                    <textarea id="comment" name="comment" rows="4"
+                        placeholder="Алергії, побажання щодо страв тощо"></textarea>
+                </p>
+
+                <p>
+                    <label>
+                        <input type="checkbox" id="consent" name="consent" value="yes">
+                        Погоджуюсь з правилами обробки персональних даних
+                    </label>
+                </p>
+            </fieldset>
+
+            <p>
+                <button type="submit">Зареєструватися</button>
+                <button type="reset">Скасувати</button>
+            </p>
+
         </form>
 
     </main>
