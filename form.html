@@ -38,24 +38,30 @@
                 <p>
                     <label for="fullname">ПІБ</label><br>
                     <input type="text" id="fullname" name="fullname"
-                        placeholder="Кучера Крістіан Віталійович">
+                        placeholder="Кучера Крістіан Віталійович"
+                        autocomplete="name" required minlength="2" maxlength="60">
                 </p>
 
                 <p>
                     <label for="email">Електронна пошта</label><br>
                     <input type="email" id="email" name="email"
-                        placeholder="example@mail.com">
+                        placeholder="example@mail.com"
+                        autocomplete="email" required>
                 </p>
 
                 <p>
                     <label for="phone">Телефон</label><br>
                     <input type="tel" id="phone" name="phone"
-                        placeholder="+380671234567">
+                        placeholder="+380671234567"
+                        autocomplete="tel"
+                        pattern="\+380\d{9}"
+                        title="Формат: +380 і рівно 9 цифр, наприклад +380671234567">
                 </p>
 
                 <p>
                     <label for="visitDate">Дата майстер-класу</label><br>
-                    <input type="date" id="visitDate" name="visitDate">
+                    <input type="date" id="visitDate" name="visitDate"
+                        min="2026-09-01" max="2027-06-30">
                 </p>
             </fieldset>
 
@@ -64,7 +70,7 @@
 
                 <p>
                     <label for="topic">Тема майстер-класу</label><br>
-                    <select id="topic" name="topic">
+                    <select id="topic" name="topic" required>
                         <option value="">— оберіть —</option>
                         <option value="borscht">Борщ та перші страви</option>
                         <option value="baking">Випічка та десерти</option>
@@ -75,13 +81,17 @@
 
                 <p>
                     <label for="participants">Кількість учасників</label><br>
-                    <input type="number" id="participants" name="participants" value="1">
+                    <input type="number" id="participants" name="participants"
+                        min="1" max="5" step="1" value="1">
                 </p>
 
                 <p>
                     <label for="bookingCode">Код бронювання</label><br>
                     <input type="text" id="bookingCode" name="bookingCode"
-                        placeholder="MK-2026-0007">
+                        placeholder="MK-2026-0007"
+                        pattern="MK-\d{4}-\d{3,4}"
+                        title="Формат: MK-РІК-НОМЕР, наприклад MK-2026-0007"
+                        required>
                 </p>
 
                 <fieldset>
@@ -107,12 +117,13 @@
                 <p>
                     <label for="comment">Коментар</label><br>
                     <textarea id="comment" name="comment" rows="4"
+                        minlength="10" maxlength="300"
                         placeholder="Алергії, побажання щодо страв тощо"></textarea>
                 </p>
 
                 <p>
                     <label>
-                        <input type="checkbox" id="consent" name="consent" value="yes">
+                        <input type="checkbox" id="consent" name="consent" value="yes" required>
                         Погоджуюсь з правилами обробки персональних даних
                     </label>
                 </p>
