@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація на майстер-клас — Смачна Хата</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Смачна Хата</h1>
+
+        <nav aria-label="Головне меню">
+            <ul>
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="form.html">Майстер-клас</a></li>
+                <li><a href="index.html#about">Про проєкт</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+        <h1>Реєстрація на кулінарний майстер-клас</h1>
+        <p>
+            Заповніть форму нижче, щоб зареєструватися на один із наших кулінарних майстер-класів.
+            Після відправлення форми з вами зв'яжеться адміністратор для підтвердження запису.
+        </p>
+
+        <form action="/submit" method="post">
+
+            <fieldset>
+                <legend>Дані користувача</legend>
+
+                <p>
+                    <label for="fullname">ПІБ</label><br>
+                    <input type="text" id="fullname" name="fullname"
+                        placeholder="Кучера Крістіан Віталійович">
+                </p>
+
+                <p>
+                    <label for="email">Електронна пошта</label><br>
+                    <input type="email" id="email" name="email"
+                        placeholder="example@mail.com">
+                </p>
+
+                <p>
+                    <label for="phone">Телефон</label><br>
+                    <input type="tel" id="phone" name="phone"
+                        placeholder="+380671234567">
+                </p>
+
+                <p>
+                    <label for="visitDate">Дата майстер-класу</label><br>
+                    <input type="date" id="visitDate" name="visitDate">
+                </p>
+            </fieldset>
+
+        </form>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>Група 1, Кучера Крістіан Віталійович, 2026</p>
+    </footer>
+
+</body>
+
+</html>
