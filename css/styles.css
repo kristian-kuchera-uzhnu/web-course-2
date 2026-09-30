@@ -136,3 +136,48 @@ footer {
     text-align: center;
     margin-top: var(--space);
 }
+
+/* --- Таблиця каталогу (оформлення тільки селекторами по структурі) --- */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: var(--space);
+}
+
+caption {
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+}
+
+th,
+td {
+    border: 1px solid var(--color-muted);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+}
+
+thead th {
+    background-color: var(--color-brand);
+    color: white;
+}
+
+/* Числові колонки (Час і Калорійність) визначаємо через nth-last-child,
+   бо через rowspan у стовпці "Категорія" позиція td від початку рядка
+   "плаває" — а от рахуючи з кінця рядка, колонки завжди на тому самому
+   місці незалежно від rowspan. */
+tbody td:nth-last-child(1),
+tbody td:nth-last-child(3) {
+    text-align: right;
+}
+
+/* Зебра: an+b = 2n означає "кожен другий рядок, починаючи з 2-го"
+   (2, 4, 6...) — тобто парні рядки тіла таблиці. */
+tbody tr:nth-child(2n) {
+    background-color: var(--color-surface);
+}
+
+tbody tr:hover {
+    background-color: var(--color-accent);
+}
