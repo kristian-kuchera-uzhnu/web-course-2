@@ -81,3 +81,58 @@ article {
     box-shadow: var(--shadow, 0 2px 8px rgb(0 0 0 / 10%));
     margin-bottom: var(--space);
 }
+
+/* --- Шапка сайту --- */
+header {
+    background-color: var(--color-brand);
+    color: white;
+    padding: var(--space);
+}
+
+header h1 {
+    color: white;
+    margin-top: 0;
+}
+
+/* --- Горизонтальне меню навігації --- */
+nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: var(--space) 0 0 0;
+}
+
+nav li {
+    display: inline-block;
+}
+
+nav a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    /* letter-spacing задаємо рівно тут, де текст великими літерами */
+    letter-spacing: 0.05em;
+    border-radius: var(--radius);
+}
+
+nav a:hover {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+}
+
+/* Поточна сторінка — клас переїжджає між файлами */
+nav a.current {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    font-weight: bold;
+}
+
+/* --- Підвал сайту --- */
+footer {
+    background-color: var(--color-surface);
+    color: var(--color-muted);
+    padding: var(--space);
+    text-align: center;
+    margin-top: var(--space);
+}
