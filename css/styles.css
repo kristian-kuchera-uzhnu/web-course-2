@@ -1,31 +1,22 @@
 /* =========================================================
-   Проєкт: Смачна Хата — кулінарний сайт
+   Смачна Хата — кулінарний сайт
    Варіант: домашні рецепти
-   Автор: Кучера Крістіан Віталійович, Група 1
-   Дата: вересень 2026
+   Кучера Крістіан Віталійович, Група 1, вересень 2026
    ========================================================= */
 
-/* Шрифти Google Fonts: заголовки — Playfair Display, текст — PT Sans.
-   Обидва мають кирилицю; css2-ендпоінт сам підвантажує потрібний
-   набір символів (unicode-range), тому окремий параметр subset не потрібен. */
+/* Шрифти з Google Fonts (з кирилицею) */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=PT+Sans:wght@400;700&display=swap');
 
 :root {
-    /* --- Палітра варіанта: теплі кольори домашньої кухні --- */
+    /* Палітра варіанта */
     --color-brand: hsl(14 65% 32%);
-    /* теракотовий — шапка, заголовки */
     --color-accent: hsl(38 85% 50%);
-    /* медово-гірчичний — кнопки, акценти */
     --color-bg: hsl(30 40% 97%);
-    /* теплий кремовий фон сторінки */
     --color-surface: hsl(30 35% 92%);
-    /* фон карток, таблиці */
     --color-text: hsl(15 25% 15%);
-    /* основний текст, темно-коричневий */
     --color-muted: hsl(20 15% 45%);
-    /* другорядний текст */
 
-    /* --- Нетипові змінні --- */
+    /* Інші змінні */
     --radius: 0.5rem;
     --space: 1rem;
     --shadow: 0 2px 8px rgb(0 0 0 / 12%);
@@ -33,16 +24,14 @@
     --font-body: "PT Sans", "Segoe UI", Arial, sans-serif;
 }
 
-/* --- Базова типографіка --- */
+/* Базова типографіка */
 html {
     font-size: 100%;
-    /* 1rem = 16px, база для решти розмірів */
 }
 
 body {
     font-family: var(--font-body);
     font-size: 1.125rem;
-    /* 18px */
     line-height: 1.6;
     color: var(--color-text);
     background-color: var(--color-bg);
@@ -69,11 +58,9 @@ h3 {
 
 p {
     max-width: 65ch;
-    /* рядки не тягнуться на весь екран */
 }
 
-/* Демонстрація var() із запасним значенням: якби --shadow не було
-   оголошено в :root, браузер узяв би значення після коми. */
+/* Якщо --shadow раптом не оголошено — підстрахуємось запасним значенням */
 article {
     background-color: var(--color-surface);
     border-radius: var(--radius);
@@ -94,7 +81,7 @@ header h1 {
     margin-top: 0;
 }
 
-/* --- Горизонтальне меню навігації --- */
+/* --- Горизонтальне меню --- */
 nav ul {
     list-style: none;
     padding-left: 0;
@@ -111,7 +98,6 @@ nav a {
     color: white;
     text-decoration: none;
     text-transform: uppercase;
-    /* letter-spacing задаємо рівно тут, де текст великими літерами */
     letter-spacing: 0.05em;
     border-radius: var(--radius);
 }
@@ -121,7 +107,6 @@ nav a:hover {
     color: var(--color-text);
 }
 
-/* Поточна сторінка — клас переїжджає між файлами */
 nav a.current {
     background-color: var(--color-accent);
     color: var(--color-text);
@@ -137,7 +122,7 @@ footer {
     margin-top: var(--space);
 }
 
-/* --- Таблиця каталогу (оформлення тільки селекторами по структурі) --- */
+/* --- Таблиця каталогу --- */
 table {
     border-collapse: collapse;
     width: 100%;
@@ -163,17 +148,14 @@ thead th {
     color: white;
 }
 
-/* Числові колонки (Час і Калорійність) визначаємо через nth-last-child,
-   бо через rowspan у стовпці "Категорія" позиція td від початку рядка
-   "плаває" — а от рахуючи з кінця рядка, колонки завжди на тому самому
-   місці незалежно від rowspan. */
+/* Рахуємо колонки з кінця рядка — так вирівнювання не зсувається
+   через rowspan у стовпці "Категорія" */
 tbody td:nth-last-child(1),
 tbody td:nth-last-child(3) {
     text-align: right;
 }
 
-/* Зебра: an+b = 2n означає "кожен другий рядок, починаючи з 2-го"
-   (2, 4, 6...) — тобто парні рядки тіла таблиці. */
+/* 2n = кожен другий рядок (парні) */
 tbody tr:nth-child(2n) {
     background-color: var(--color-surface);
 }
@@ -215,19 +197,15 @@ textarea {
     font-size: 1rem;
 }
 
-/* Зірочка на обов'язкових полях через псевдоелемент, без зміни розмітки.
-   :has() перевіряє, чи є серед "сусідів" label обов'язкове поле —
-   якщо так, дописуємо зірочку одразу після тексту підпису. */
+/* Автоматична зірочка на обов'язкових полях, без правок у розмітці */
 label:has(~ input:required)::after,
 label:has(~ select:required)::after {
     content: " *";
     color: var(--color-accent);
 }
 
-/* Підсвітка стану поля — тільки під час фокусу (:focus:invalid), а не
-   просто :invalid. Якщо прибрати :focus, поле підсвічувалось би
-   червоним одразу після завантаження сторінки, ще до того, як людина
-   встигла хоч щось увести — це виглядало б так, ніби форма вже "зламана". */
+/* Підсвічуємо тільки під час фокусу — інакше форма виглядала б
+   "зламаною" червоним кольором одразу після завантаження сторінки */
 input:focus:invalid {
     border-color: #b3261e;
     background-color: hsl(4 60% 96%);
@@ -238,7 +216,7 @@ input:focus:valid {
     background-color: hsl(120 40% 96%);
 }
 
-/* --- Кнопки: розрізняємо через атрибутний селектор, без класів --- */
+/* --- Кнопки --- */
 button[type="submit"] {
     background-color: var(--color-accent);
     color: var(--color-text);
@@ -257,3 +235,98 @@ button[type="reset"] {
     border-radius: var(--radius);
     cursor: pointer;
 }
+
+/* =========================================================
+   Обов'язковий набір селекторів
+   ========================================================= */
+
+/* Заокруглюємо тільки крайні пункти меню */
+nav li:first-child a {
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+}
+
+nav li:last-child a {
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
+
+/* Підсвічуємо обраний перемикач/прапорець */
+input[type="radio"]:checked,
+input[type="checkbox"]:checked {
+    outline: 2px solid var(--color-accent);
+}
+
+/* Лапки навколо цитати */
+blockquote::before {
+    content: "«";
+    color: var(--color-accent);
+    font-size: 1.5em;
+}
+
+blockquote::after {
+    content: "»";
+    color: var(--color-accent);
+    font-size: 1.5em;
+}
+
+/* Комбінатор-нащадок (пробіл) використовується по всьому файлу вище.
+   Тут — ще два типи: */
+
+/* ">" — тільки h1, що є прямим нащадком header */
+header>h1 {
+    letter-spacing: 0.02em;
+}
+
+/* "+" — тільки абзац одразу після h2 */
+h2+p {
+    margin-top: 0.5rem;
+}
+
+/* Позначаємо зовнішні посилання стрілочкою */
+a[href^="http"]::after {
+    content: " ↗";
+    color: var(--color-accent);
+}
+
+/* --- Стани посилань LVHFA ---
+   Порядок важливий: усі стани мають однакову вагу, тому виграє
+   те правило, яке стоїть у файлі нижче. Порушиш порядок —
+   і, наприклад, :hover перестане працювати нормально. */
+a:link {
+    color: var(--color-brand);
+}
+
+a:visited {
+    color: var(--color-muted);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+a:active {
+    color: var(--color-text);
+}
+
+/* =========================================================
+   Демонстрація специфічності
+   h3          → (0,0,1)
+   .card h3    → (0,1,1)
+   #promo h3   → (1,1,1)  ← перемагає, бо є id
+   ========================================================= */
+/* h3       { color: var(--color-text); } */
+/* .card h3 { color: var(--color-muted); } */
+#promo h3 {
+    color: var(--color-brand);
+}
+
+/* inline style="color: green;" переміг би все вище — у нього
+   специфічність вища за будь-який id. Тому inline-стилі й не
+   використовують для нормальної стилізації. */
+/* <h3 style="color: green;">Борщ український</h3> */
