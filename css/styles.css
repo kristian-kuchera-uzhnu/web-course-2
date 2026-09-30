@@ -181,3 +181,79 @@ tbody tr:nth-child(2n) {
 tbody tr:hover {
     background-color: var(--color-accent);
 }
+
+/* --- Форма реєстрації --- */
+fieldset {
+    border: 1px solid var(--color-muted);
+    border-radius: var(--radius);
+    padding: var(--space);
+    margin-bottom: var(--space);
+}
+
+legend {
+    font-family: var(--font-heading);
+    font-weight: bold;
+    padding: 0 0.5rem;
+    color: var(--color-brand);
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 28rem;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--color-muted);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 1rem;
+}
+
+/* Зірочка на обов'язкових полях через псевдоелемент, без зміни розмітки.
+   :has() перевіряє, чи є серед "сусідів" label обов'язкове поле —
+   якщо так, дописуємо зірочку одразу після тексту підпису. */
+label:has(~ input:required)::after,
+label:has(~ select:required)::after {
+    content: " *";
+    color: var(--color-accent);
+}
+
+/* Підсвітка стану поля — тільки під час фокусу (:focus:invalid), а не
+   просто :invalid. Якщо прибрати :focus, поле підсвічувалось би
+   червоним одразу після завантаження сторінки, ще до того, як людина
+   встигла хоч щось увести — це виглядало б так, ніби форма вже "зламана". */
+input:focus:invalid {
+    border-color: #b3261e;
+    background-color: hsl(4 60% 96%);
+}
+
+input:focus:valid {
+    border-color: #2e7d32;
+    background-color: hsl(120 40% 96%);
+}
+
+/* --- Кнопки: розрізняємо через атрибутний селектор, без класів --- */
+button[type="submit"] {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--radius);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button[type="reset"] {
+    background-color: transparent;
+    color: var(--color-muted);
+    border: 1px solid var(--color-muted);
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
