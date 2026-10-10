@@ -7,6 +7,11 @@
 /* Шрифти з Google Fonts (з кирилицею) */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=PT+Sans:wght@400;700&display=swap');
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 :root {
     /* Палітра варіанта */
     --color-brand: hsl(14 65% 32%);
@@ -22,6 +27,13 @@
     --shadow: 0 2px 8px rgb(0 0 0 / 12%);
     --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
     --font-body: "PT Sans", "Segoe UI", Arial, sans-serif;
+
+    /* Розміри */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --card-width: 260px;
 }
 
 /* Базова типографіка */
