@@ -342,3 +342,60 @@ a:active {
    специфічність вища за будь-який id. Тому inline-стилі й не
    використовують для нормальної стилізації. */
 /* <h3 style="color: green;">Борщ український</h3> */
+
+
+/* ===== Картки каталогу ===== */
+.cards {
+    margin: var(--space-md) 0 0;
+}
+
+/* Пишемо .cards .card, щоб не зачепити статті-картки на головній з LR4.
+   Падінг від правила article тут скидаємо: картинка має йти від краю до краю. */
+.cards .card {
+    display: inline-block;
+    vertical-align: top;
+    width: var(--card-width);
+    margin: 0 var(--space-md) var(--space-lg) 0;
+    padding: 0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    /* overflow: hidden обрізає кути картинки по заокругленню картки, інакше вони б стирчали */
+    overflow: hidden;
+}
+
+.card__body {
+    padding: var(--space-md);
+}
+
+.card__img {
+    /* block, бо img за замовчуванням рядковий і лишає під собою зайві пікселі */
+    display: block;
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Три крапки працюють тільки всі разом: nowrap + overflow + ellipsis */
+.card__title {
+    margin: 0 0 var(--space-sm);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card__meta,
+.card__id {
+    margin: 0 0 var(--space-sm);
+}
+
+.card__meta {
+    color: var(--color-muted);
+}
+
+.card__id {
+    font-size: 0.9rem;
+}
