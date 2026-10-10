@@ -335,7 +335,7 @@ a:active {
 /* h3       { color: var(--color-text); } */
 /* .card h3 { color: var(--color-muted); } */
 #promo h3 {
-    color: var(--color-brand);
+    color: var(--color-text);
 }
 
 /* inline style="color: green;" переміг би все вище — у нього
@@ -461,6 +461,23 @@ main > img {
 
 .banner p {
     margin: 0;
+}
+/* Посилання меню лишаються світлими: a:link і a:visited сильніші за "nav a" */
+nav a:link,
+nav a:visited {
+    color: white;
+}
+
+nav a:hover,
+nav a.current:link,
+nav a.current:visited {
+    color: var(--color-text);
+}
+
+article header {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
 }
 
 /* ===== Демонстрація: схлопування відступів ===== */
