@@ -441,3 +441,24 @@ main > img {
     margin: 0 0 var(--space-lg);
     border-radius: var(--radius);
 }
+
+
+/* ===== Градієнтний банер ===== */
+.banner {
+    width: min(100%, 900px);
+    margin: 0 auto var(--space-lg);
+    padding: var(--space-lg);
+    border-radius: var(--radius);
+    color: var(--color-bg);
+    background-image: linear-gradient(120deg, var(--color-brand), var(--color-accent));
+    /* тінь, щоб світлий кінець градієнта не з'їдав літери */
+    text-shadow: 0 1px 3px rgb(0 0 0 / 45%);
+}
+
+.banner h2 {
+    margin: 0 0 var(--space-sm);
+}
+
+.banner p {
+    margin: 0;
+}
