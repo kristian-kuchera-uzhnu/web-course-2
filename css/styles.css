@@ -637,6 +637,13 @@ dialog button {
     border-radius: var(--radius);
     cursor: pointer;
 }
+
+.dark-theme {
+  --color-bg: #1b2631;
+  --color-surface: #22313f;
+  --color-text: #eaeded;
+  --color-accent: #5dade2;
+}
 /* ===== Демонстрація: схлопування відступів ===== */
 /* Схлопування вертикальних відступів (margin collapse).
    Якщо розкоментувати блок нижче, відстань між абзацами .card__meta
