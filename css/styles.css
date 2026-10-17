@@ -363,6 +363,8 @@ a:active {
 /* Пишемо .cards .card, щоб не зачепити статті-картки на головній з LR4.
    Падінг від правила article тут скидаємо: картинка має йти від краю до краю. */
 .cards .card {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     background-color: var(--color-surface);
@@ -379,6 +381,7 @@ a:active {
 
 .card__img {
     /* block, бо img за замовчуванням рядковий і лишає під собою зайві пікселі */
+    flex-shrink: 0;
     display: block;
     width: 100%;
     aspect-ratio: 4 / 3;
@@ -486,6 +489,35 @@ article header {
     background-color: transparent;
     color: inherit;
     padding: 0;
+}
+
+/* ===== Кнопка-посилання внизу картки ===== */
+.card__action {
+    /* auto забирає весь вільний простір над елементом і притискає його до низу.
+       Так само margin: 0 auto центрує блок по горизонталі: вільне місце
+       віддається автоматичним відступам. */
+    margin-top: auto;
+    margin-right: var(--space-md);
+    margin-bottom: var(--space-md);
+    margin-left: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: var(--color-accent);
+    border-radius: var(--radius);
+}
+
+/* Стани посилань тут сильніші за загальні a:link і a:hover,
+   інакше текст зливався б із фоном кнопки */
+.card__action:link,
+.card__action:visited {
+    color: var(--color-text);
+}
+
+.card__action:hover {
+    background-color: var(--color-brand);
+    color: var(--color-bg);
 }
 
 /* ===== Демонстрація: схлопування відступів ===== */
