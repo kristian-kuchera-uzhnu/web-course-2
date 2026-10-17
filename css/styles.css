@@ -552,6 +552,91 @@ article header {
     padding-left: var(--space-md);
 }
 
+/* ===== Притиснутий футер ===== */
+/* Росте .layout (а на form.html, де макета немає, росте main). flex: 1 віддає
+   йому весь вільний простір колонки body. height: 100% тут не годиться: поруч
+   ще шапка і футер, і разом вони вилізли б за межі вікна. */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: var(--space-sm);
+}
+
+.layout {
+    flex: 1;
+    /* ряд зі змістом росте, ряд футера лишається по вмісту */
+    grid-template-rows: 1fr auto;
+}
+
+main {
+    flex: 1;
+}
+
+/* ===== Кнопки внизу першої картки ===== */
+.card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin: auto var(--space-md) var(--space-md);
+}
+
+/* усередині обгортки відступи вже дає вона сама */
+.card__actions .card__action {
+    margin: 0;
+    flex: 1;
+}
+
+.card__actions button {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    font: inherit;
+    color: var(--color-muted);
+    background-color: transparent;
+    border: 1px solid var(--color-muted);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+/* ===== Модальне вікно ===== */
+/* z-index тут не потрібен: showModal() виводить вікно в top layer, окремий шар
+   браузера над усією сторінкою. Шапка з LR5 жила в одному шарі з картками і
+   змагалась із ними за порядок накладання, тому їй z-index був потрібен. */
+dialog {
+    width: min(90%, 420px);
+    padding: var(--space-lg);
+    border: none;
+    border-radius: var(--radius);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 12px 28px rgb(0 0 0 / 35%);
+}
+
+/* затемнення малює браузер, окремий елемент для нього не потрібен */
+dialog::backdrop {
+    background: rgb(0 0 0 / 55%);
+}
+
+/* Поки модалка відкрита, блокуємо прокручування сторінки позаду */
+body:has(dialog[open]) {
+    overflow: hidden;
+}
+
+dialog h2 {
+    margin-top: 0;
+}
+
+dialog button {
+    padding: var(--space-sm) var(--space-md);
+    font: inherit;
+    font-weight: bold;
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
 /* ===== Демонстрація: схлопування відступів ===== */
 /* Схлопування вертикальних відступів (margin collapse).
    Якщо розкоментувати блок нижче, відстань між абзацами .card__meta
