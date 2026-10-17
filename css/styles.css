@@ -101,35 +101,52 @@ header h1 {
     margin-top: 0;
 }
 
-/* --- Горизонтальне меню --- */
-nav ul {
+/* --- Шапка і меню на Flexbox --- */
+.site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap);
+}
+
+.site-header h1 {
+    margin: 0;
+}
+
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
     list-style: none;
-    padding-left: 0;
-    margin: var(--space) 0 0 0;
+    margin: 0;
+    padding: 0;
 }
 
-nav li {
-    display: inline-block;
-}
-
-nav a {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    color: white;
+.menu a {
+    display: block;
+    padding: var(--space-sm) var(--space-md);
     text-decoration: none;
     text-transform: uppercase;
+    /* letter-spacing задаємо тут, де текст великими літерами */
     letter-spacing: 0.05em;
     border-radius: var(--radius);
 }
 
-nav a:hover {
+/* .menu a:link сильніше за загальне a:link, тому колір меню не перебивається */
+.menu a:link,
+.menu a:visited {
+    color: white;
+}
+
+.menu a:hover,
+.menu a.current:link,
+.menu a.current:visited {
     background-color: var(--color-accent);
     color: var(--color-text);
 }
 
-nav a.current {
-    background-color: var(--color-accent);
-    color: var(--color-text);
+.menu a.current {
     font-weight: bold;
 }
 
@@ -473,51 +490,11 @@ main > img {
 .banner p {
     margin: 0;
 }
-/* Посилання меню лишаються світлими: a:link і a:visited сильніші за "nav a" */
-nav a:link,
-nav a:visited {
-    color: white;
-}
-
-nav a:hover,
-nav a.current:link,
-nav a.current:visited {
-    color: var(--color-text);
-}
 
 article header {
     background-color: transparent;
     color: inherit;
     padding: 0;
-}
-
-/* ===== Кнопка-посилання внизу картки ===== */
-.card__action {
-    /* auto забирає весь вільний простір над елементом і притискає його до низу.
-       Так само margin: 0 auto центрує блок по горизонталі: вільне місце
-       віддається автоматичним відступам. */
-    margin-top: auto;
-    margin-right: var(--space-md);
-    margin-bottom: var(--space-md);
-    margin-left: var(--space-md);
-    padding: var(--space-sm) var(--space-md);
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-    background-color: var(--color-accent);
-    border-radius: var(--radius);
-}
-
-/* Стани посилань тут сильніші за загальні a:link і a:hover,
-   інакше текст зливався б із фоном кнопки */
-.card__action:link,
-.card__action:visited {
-    color: var(--color-text);
-}
-
-.card__action:hover {
-    background-color: var(--color-brand);
-    color: var(--color-bg);
 }
 
 /* ===== Демонстрація: схлопування відступів ===== */
