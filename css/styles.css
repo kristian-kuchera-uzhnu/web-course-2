@@ -34,11 +34,19 @@
     --space-md: 1rem;
     --space-lg: 2rem;
     --card-width: 260px;
+        /* Макет */
+    --gap: 1.25rem;
+    --min-col: 240px;
+    --sidebar: 220px;
 }
 
 /* Базова типографіка */
 html {
     font-size: 100%;
+}
+
+img {
+    max-width: 100%;
 }
 
 body {
@@ -346,16 +354,16 @@ a:active {
 
 /* ===== Картки каталогу ===== */
 .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
+    gap: var(--gap);
     margin: var(--space-md) 0 0;
 }
 
 /* Пишемо .cards .card, щоб не зачепити статті-картки на головній з LR4.
    Падінг від правила article тут скидаємо: картинка має йти від краю до краю. */
 .cards .card {
-    display: inline-block;
-    vertical-align: top;
-    width: var(--card-width);
-    margin: 0 var(--space-md) var(--space-lg) 0;
+    margin: 0;
     padding: 0;
     background-color: var(--color-surface);
     border: 1px solid var(--color-muted);
@@ -373,7 +381,7 @@ a:active {
     /* block, бо img за замовчуванням рядковий і лишає під собою зайві пікселі */
     display: block;
     width: 100%;
-    height: 170px;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     object-position: center;
 }
