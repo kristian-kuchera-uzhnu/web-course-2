@@ -71,24 +71,19 @@ body {
     background-color: var(--color-bg);
 }
 
-h1 {
-    font-size: clamp(1.75rem, 6vw, 2.25rem);
-}
-
-h2 {
-    font-size: clamp(1.4rem, 4.5vw, 1.75rem);
-}
+h1,
+h2,
 h3 {
     font-family: var(--font-heading);
     line-height: 1.2;
 }
 
 h1 {
-    font-size: 2.25rem;
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
 }
 
 h2 {
-    font-size: 1.75rem;
+    font-size: clamp(1.4rem, 4.5vw, 1.75rem);
 }
 
 h3 {
@@ -405,6 +400,21 @@ a:active {
     margin: var(--space-md) 0 0;
 }
 
+
+/* 1 / 2 / 3 картки в ряд змінюємо мінімальною шириною колонки,
+   а не кількістю колонок: auto-fit сам вирішує, скільки влізе */
+@media (min-width: 768px) {
+    .cards {
+        --min-col: 220px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .cards {
+        --min-col: 200px;
+    }
+}
+
 /* Пишемо .cards .card, щоб не зачепити статті-картки на головній з LR4.
    Падінг від правила article тут скидаємо: картинка має йти від краю до краю. */
 .cards .card {
@@ -526,13 +536,40 @@ article header {
 }
 
 /* ===== Макет сторінки через grid-template-areas ===== */
+/* База — телефон: одна колонка, зони йдуть одна за одною */
 .layout {
     display: grid;
-    grid-template-columns: var(--sidebar) 1fr var(--sidebar);
-    grid-template-areas:
-        "nav  main side"
-        "foot foot foot";
     gap: var(--gap);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto auto; /* росте main, щоб футер стояв унизу */
+    grid-template-areas:
+        "nav"
+        "main"
+        "side"
+        "foot";
+}
+
+/* Планшет: дві колонки */
+@media (min-width: 768px) {
+    .layout {
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "nav  nav"
+            "main side"
+            "foot foot";
+    }
+}
+
+/* Десктоп: повна схема з LR6 */
+@media (min-width: 1024px) {
+    .layout {
+        grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "nav  main side"
+            "foot foot foot";
+    }
 }
 
 .layout__nav {
@@ -588,14 +625,14 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin: 0;
+    width: min(100%, 1200px); /* макет не розтягується на широких моніторах */
+    margin: 0 auto;           /* і стоїть по центру */
     padding: var(--space-sm);
 }
 
 .layout {
     flex: 1;
     /* ряд зі змістом росте, ряд футера лишається по вмісту */
-    grid-template-rows: 1fr auto;
 }
 
 main {
