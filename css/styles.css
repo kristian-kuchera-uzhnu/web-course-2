@@ -418,6 +418,7 @@ a:active {
 /* Пишемо .cards .card, щоб не зачепити статті-картки на головній з LR4.
    Падінг від правила article тут скидаємо: картинка має йти від краю до краю. */
 .cards .card {
+    transition: transform 250ms ease, box-shadow 250ms ease;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -436,6 +437,7 @@ a:active {
 
 .card__img {
     /* block, бо img за замовчуванням рядковий і лишає під собою зайві пікселі */
+    transition: transform 400ms ease;
     flex-shrink: 0;
     display: block;
     width: 100%;
@@ -493,11 +495,18 @@ a:active {
    sticky її прилипає, а z-index тримає над картками, у яких теж є position.
    Пишемо body > header, щоб не зробити липкими header усередині статей. */
 body > header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
     padding: var(--space-sm) var(--space-md);
     background-color: var(--color-brand);
+}
+
+/* На телефоні відкрите меню займало б пів екрана, тому шапка
+   стає липкою з планшета */
+@media (min-width: 768px) {
+    body > header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
 }
 
 main > img {
@@ -708,6 +717,90 @@ dialog button {
   --color-surface: #22313f;
   --color-text: #eaeded;
   --color-accent: #5dade2;
+}
+
+
+/* ===== Меню, що складається (details/summary, без JavaScript) ===== */
+/* База — телефон: кнопка «☰ Меню» і вертикальний список */
+.nav {
+    flex: 1 1 100%;
+}
+
+.nav__toggle {
+    display: flex;
+    align-items: center;
+    min-height: 44px; /* мінімальна зона натискання для пальця */
+    padding: var(--space-sm) var(--space-md);
+    list-style: none;
+    font-weight: bold;
+    color: var(--color-text);
+    background-color: var(--color-accent);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.nav__toggle::-webkit-details-marker {
+    display: none;
+}
+
+.nav__toggle:hover {
+    background-color: var(--color-surface);
+}
+
+/* Видимий фокус для клавіатури: Tab, потім Enter або Пробіл */
+.nav__toggle:focus-visible {
+    outline: 3px solid var(--color-bg);
+    outline-offset: 2px;
+}
+
+.nav details[open] > .nav__toggle {
+    margin-bottom: var(--space-sm);
+}
+
+.nav details > .menu {
+    flex-direction: column;
+}
+
+.nav .menu a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+}
+
+/* Планшет і вище: кнопка зникає, меню стає горизонтальним рядом */
+@media (min-width: 768px) {
+    .nav {
+        flex: 0 1 auto;
+    }
+
+    .nav__toggle {
+        display: none;
+    }
+
+    .nav details > .menu {
+        flex-direction: row;
+    }
+
+    .nav .menu a {
+        display: block;
+        min-height: 0;
+    }
+}
+
+/* ===== Переходи на картках ===== */
+/* transition стоїть на базовому правилі .cards .card (вище), а не в :hover,
+   тому картка плавно повертається назад, коли курсор іде геть.
+   :focus-within дає той самий ефект для клавіатури. */
+.cards .card:hover,
+.cards .card:focus-within {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgb(0 0 0 / 18%);
+}
+
+/* Вкладений ефект: обкладинка трохи збільшується */
+.cards .card:hover .card__img,
+.cards .card:focus-within .card__img {
+    transform: scale(1.08);
 }
 /* ===== Демонстрація: схлопування відступів ===== */
 /* Схлопування вертикальних відступів (margin collapse).
