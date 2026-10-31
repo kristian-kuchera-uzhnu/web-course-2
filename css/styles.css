@@ -802,6 +802,90 @@ dialog button {
 .cards .card:focus-within .card__img {
     transform: scale(1.08);
 }
+
+
+/* ===== Анімація появи модалки ===== */
+@keyframes fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes pop {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* both = backwards + forwards: до початку анімації елемент стоїть у стані
+   першого кадру, а після кінця лишається в стані останнього. Без both під
+   час затримки він би показувався вже готовим і потім різко «стрибав»
+   на початок анімації. Тло з'являється швидше (200ms), сам блок «доганяє» (280ms). */
+dialog[open] {
+    animation: pop 280ms ease-out both;
+}
+
+dialog[open]::backdrop {
+    animation: fade 200ms ease-out both;
+}
+
+/* ===== Спінер завантаження (заготовка для LR10) ===== */
+/* display задаємо тільки для .loader:not([hidden]): звичайне .loader { display: flex }
+   перебило б атрибут hidden, і індикатор був би видно завжди */
+.loader:not([hidden]) {
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+    margin: var(--space-md) 0 0;
+}
+
+.loader p {
+    margin: 0;
+}
+
+/* linear, бо кут росте рівномірно: колесо крутиться з постійною швидкістю.
+   З ease кожен оберт починався б повільно, прискорювався й гальмував,
+   тож спінер смикався б на кожному колі. */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 6px solid var(--color-surface);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== Повага до prefers-reduced-motion ===== */
+/* Загальний блок: рух не вимикаємо, а робимо миттєвим (0.01ms). Якби тривалість
+   була 0, події animationend і transitionend могли б не спрацювати.
+   !important тут виправданий: правило має перебити будь-яку тривалість у
+   будь-якому компоненті, а перелічувати їх усі й підтримувати список ніхто не буде. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Тонше правило для картки: замість руху лишаємо безпечний відгук рамкою */
+@media (prefers-reduced-motion: reduce) {
+    .cards .card:hover,
+    .cards .card:focus-within {
+        transform: none;
+        border-color: var(--color-accent);
+    }
+
+    .cards .card:hover .card__img,
+    .cards .card:focus-within .card__img {
+        transform: none;
+    }
+}
 /* ===== Демонстрація: схлопування відступів ===== */
 /* Схлопування вертикальних відступів (margin collapse).
    Якщо розкоментувати блок нижче, відстань між абзацами .card__meta
