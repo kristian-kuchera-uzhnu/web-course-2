@@ -886,6 +886,18 @@ dialog[open]::backdrop {
         transform: none;
     }
 }
+
+/* ===== Демонстрація роботи (JS) ===== */
+/* pre-line зберігає переноси рядків із тексту, але склеює зайві пробіли;
+   без нього весь вивід склеївся б в один суцільний рядок. */
+.js-out {
+    white-space: pre-line;
+    font-family: ui-monospace, monospace;
+    background-color: var(--color-surface);
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    line-height: 1.7;
+}
 /* ===== Демонстрація: схлопування відступів ===== */
 /* Схлопування вертикальних відступів (margin collapse).
    Якщо розкоментувати блок нижче, відстань між абзацами .card__meta

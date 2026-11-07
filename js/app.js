@@ -58,9 +58,26 @@ const recipes = [
 ];
 
 // ===== Допоміжні функції =====
-
+// Записує текст у елемент з вказаним id. Масив рядків склеює переносами.
+const show = (id, value) => {
+    const box = document.getElementById(id);
+    if (box === null) {
+        console.error("Немає елемента з id:", id);
+        return;
+    }
+    box.textContent = Array.isArray(value) ? value.join("\n") : value;
+};
 // ===== Функції обробки =====
-
+// Приймає масив рецептів, повертає масив рядків «1. Назва — категорія, ккал (код)».
+const numberedList = (items) => {
+    const lines = [];
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        lines.push(`${i + 1}. ${item.title} — ${item.category}, ${item.calories} ккал (${item.details.code})`);
+    }
+    return lines;
+};
 // ===== Виведення на сторінку =====
-
+show("out-count", `Рецептів у каталозі: ${recipes.length}`);
+show("out-numbered", numberedList(recipes));
 console.log("app.js підключено"); // тимчасово, приберемо наприкінці
