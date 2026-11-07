@@ -77,7 +77,67 @@ const numberedList = (items) => {
     }
     return lines;
 };
+
+// Приймає рецепт, повертає назву групи за категорією (switch із групуванням case).
+function categoryOf(recipe) {
+    switch (recipe.category) {
+        case "перші страви":
+        case "основні страви":
+            return "Гарячі страви";
+        case "випічка та десерти":
+        case "сніданки":
+            return "Випічка та сніданки";
+        default:
+            return "Холодні страви й закуски";
+    }
+}
+
+// Приймає масив і категорію, повертає рецепти з точно такою категорією.
+const filterByCategory = (items, value) => items.filter((r) => r.category === value);
+
+// Приймає масив і ліміт, повертає рецепти, які готуються не довше ніж maxMinutes хвилин.
+const filterByMinutesUpTo = (items, maxMinutes) => items.filter((r) => r.minutes <= maxMinutes);
+
+// Приймає масив рецептів, повертає рядок зі списком назв або «нічого не знайдено».
+const namesOf = (items) =>
+    items.length > 0 ? items.map((r) => `  • ${r.title}`).join("\n") : "  нічого не знайдено";
+
+// Приймає масив, повертає НОВИЙ масив, відсортований за часом приготування (за зростанням).
+const sortByMinutes = (items) => [...items].sort((a, b) => a.minutes - b.minutes);
+
+// Приймає масив, повертає НОВИЙ масив, відсортований за назвою в українській абетці.
+const sortByTitle = (items) => [...items].sort((a, b) => a.title.localeCompare(b.title, "uk"));
+
+// Приймає масив рецептів, повертає масив рядків «назва (N хв)».
+const withMinutes = (items) => items.map((r) => `${r.title} (${r.minutes} хв)`);
 // ===== Виведення на сторінку =====
 show("out-count", `Рецептів у каталозі: ${recipes.length}`);
 show("out-numbered", numberedList(recipes));
+
+show("out-categories", recipes.map((r) => `${r.title} → ${categoryOf(r)}`));
+
+const firstCourses = filterByCategory(recipes, "перші страви");
+const quick = filterByMinutesUpTo(recipes, 40);
+const none = filterByCategory(recipes, "морозиво");
+
+show("out-filter", [
+    `Категорія «перші страви»: знайдено ${firstCourses.length}`,
+    namesOf(firstCourses),
+    `Готуються до 40 хвилин: знайдено ${quick.length}`,
+    namesOf(quick),
+    `Категорія «морозиво»: знайдено ${none.length}`,
+    namesOf(none)
+]);
+
+show("out-sorted", [
+    "За часом приготування:",
+    ...withMinutes(sortByMinutes(recipes)),
+    "",
+    "За назвою (українська абетка):",
+    ...withMinutes(sortByTitle(recipes)),
+    "",
+    "Вихідний порядок (оригінал не змінено):",
+    ...withMinutes(recipes)
+]);
+
 console.log("app.js підключено"); // тимчасово, приберемо наприкінці
