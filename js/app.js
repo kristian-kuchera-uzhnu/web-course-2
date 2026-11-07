@@ -110,6 +110,22 @@ const sortByTitle = (items) => [...items].sort((a, b) => a.title.localeCompare(b
 
 // Приймає масив рецептів, повертає масив рядків «назва (N хв)».
 const withMinutes = (items) => items.map((r) => `${r.title} (${r.minutes} хв)`);
+
+// Приймає масив рецептів, повертає об’єкт зі статистикою за часом приготування.
+const statsForRecipes = (items) => {
+    // 0 — початкове значення суми. Без нього першим «накопичувачем» став би
+    // сам об’єкт-рецепт, і додавання дало б рядок «[object Object]20…»
+    // замість числа (а на порожньому масиві було б ще й TypeError).
+    const total = items.reduce((sum, r) => sum + r.minutes, 0);
+    const longest = items.reduce((best, r) => (r.minutes > best.minutes ? r : best), items[0]);
+    return {
+        count: items.length,
+        total: total,
+        average: (total / items.length).toFixed(1),
+        max: longest,
+        categories: new Set(items.map((r) => r.category)).size
+    };
+};
 // ===== Виведення на сторінку =====
 show("out-count", `Рецептів у каталозі: ${recipes.length}`);
 show("out-numbered", numberedList(recipes));
@@ -138,6 +154,15 @@ show("out-sorted", [
     "",
     "Вихідний порядок (оригінал не змінено):",
     ...withMinutes(recipes)
+]);
+
+const stats = statsForRecipes(recipes);
+show("out-stats", [
+    `Рецептів: ${stats.count}`,
+    `Загальний час: ${stats.total} хв`,
+    `Середній час: ${stats.average} хв`,
+    `Найдовший рецепт: ${stats.max.title} — ${stats.max.minutes} хв`,
+    `Різних категорій: ${stats.categories}`
 ]);
 
 console.log("app.js підключено"); // тимчасово, приберемо наприкінці
