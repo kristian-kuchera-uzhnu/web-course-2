@@ -127,6 +127,7 @@ const statsForRecipes = (items) => {
     };
 };
 // ===== Виведення на сторінку =====
+if (document.getElementById("demo")) {
 show("out-count", `Рецептів у каталозі: ${recipes.length}`);
 show("out-numbered", numberedList(recipes));
 
@@ -164,5 +165,6 @@ show("out-stats", [
     `Найдовший рецепт: ${stats.max.title} — ${stats.max.minutes} хв`,
     `Різних категорій: ${stats.categories}`
 ]);
+}
 
 console.log("app.js підключено"); // тимчасово, приберемо наприкінці
