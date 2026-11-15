@@ -273,3 +273,83 @@ if (searchInput && categoryFilter) {
 }
 
 renderCards(recipes);
+
+let toastTimerId;
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.hidden = false;
+    // clearTimeout скасовує попереднє приховування, якщо нове повідомлення з’явилося раніше.
+    clearTimeout(toastTimerId);
+    toastTimerId = setTimeout(() => {
+        toast.hidden = true;
+    }, 2500);
+}
+
+const registrationForm = document.querySelector("form");
+if (registrationForm) {
+    const fields = [...registrationForm.querySelectorAll(
+        'input:not([type="radio"]):not([name="extras"]):not([type="submit"]):not([type="reset"]), select, textarea'
+    )];
+    const receipt = document.createElement("section");
+    receipt.id = "receipt";
+    receipt.setAttribute("aria-live", "polite");
+    registrationForm.after(receipt);
+
+    // Клієнтська перевірка допомагає користувачу, але її можна обійти; дані по-справжньому перевіряє сервер.
+    registrationForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        receipt.replaceChildren();
+
+        const dateInput = registrationForm.elements.visitDate;
+        const dateParts = new Date();
+        const today = `${dateParts.getFullYear()}-${String(dateParts.getMonth() + 1).padStart(2, "0")}-${String(dateParts.getDate()).padStart(2, "0")}`;
+        dateInput.setCustomValidity(
+            dateInput.value && dateInput.value < today ? "Оберіть дату не раніше сьогоднішньої." : ""
+        );
+
+        let valid = true;
+        for (const field of fields) {
+            const ok = field.checkValidity();
+            field.classList.toggle("invalid", !ok);
+            document.getElementById(`err-${field.id}`).textContent = ok ? "" : field.validationMessage;
+            valid = valid && ok;
+        }
+        if (!valid) {
+            showToast("Перевірте поля з повідомленнями про помилки");
+            return;
+        }
+
+        const selectedLevel = registrationForm.querySelector('input[name="level"]:checked');
+        const extras = [...registrationForm.querySelectorAll('input[name="extras"]:checked')]
+            .map((input) => input.value)
+            .join(", ") || "немає";
+        const lines = [
+            `ПІБ: ${registrationForm.elements.fullname.value}`,
+            `Email: ${registrationForm.elements.email.value}`,
+            `Телефон: ${registrationForm.elements.phone.value || "не вказано"}`,
+            `Дата: ${registrationForm.elements.visitDate.value || "не вказана"}`,
+            `Тема: ${registrationForm.elements.topic.selectedOptions[0].textContent}`,
+            `Учасників: ${Number(registrationForm.elements.participants.value)}`,
+            `Код бронювання: ${registrationForm.elements.bookingCode.value}`,
+            `Рівень: ${selectedLevel ? selectedLevel.value : "не обрано"}`,
+            `Додаткові побажання: ${extras}`,
+            `Згода на обробку даних: ${registrationForm.elements.consent.checked ? "так" : "ні"}`,
+            `Коментар: ${registrationForm.elements.comment.value}`
+        ];
+
+        receipt.replaceChildren();
+        const heading = document.createElement("h2");
+        heading.textContent = "Квитанція запису";
+        const list = document.createElement("ul");
+        for (const line of lines) {
+            const item = document.createElement("li");
+            item.textContent = line;
+            list.append(item);
+        }
+        receipt.append(heading, list);
+        registrationForm.reset();
+        showToast("Реєстрацію успішно надіслано");
+    });
+}
