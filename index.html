@@ -14,17 +14,15 @@
     <header class="site-header">
         <h1>Смачна Хата</h1>
 
-        <nav class="nav" aria-label="Головне меню">
-            <details open>
-                <summary class="nav__toggle">☰ Меню</summary>
-                <ul class="menu">
+        <button id="burger" class="burger" type="button" aria-expanded="false" aria-controls="menu">☰ Меню</button>
+        <nav id="menu" class="menu" aria-label="Головне меню">
+            <ul class="menu__list">
                     <li><a href="index.html" class="current">Головна</a></li>
                     <li><a href="catalog.html">Каталог</a></li>
                     <li><a href="form.html">Майстер-клас</a></li>
                     <li><a href="#about">Про проєкт</a></li>
                     <li><a href="#tips">Поради</a></li>
                 </ul>
-            </details>
         </nav>
         <button onclick="document.body.classList.toggle('dark-theme')">Тема</button>
     </header>

@@ -128,7 +128,7 @@ header h1 {
     margin: 0;
 }
 
-.menu {
+.menu__list {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm);
@@ -720,68 +720,65 @@ dialog button {
 }
 
 
-/* ===== Меню, що складається (details/summary, без JavaScript) ===== */
-/* База — телефон: кнопка «☰ Меню» і вертикальний список */
-.nav {
+.site-header #menu {
+    display: none;
     flex: 1 1 100%;
 }
 
-.nav__toggle {
-    display: flex;
-    align-items: center;
-    min-height: 44px; /* мінімальна зона натискання для пальця */
-    padding: var(--space-sm) var(--space-md);
-    list-style: none;
-    font-weight: bold;
-    color: var(--color-text);
-    background-color: var(--color-accent);
-    border-radius: var(--radius);
-    cursor: pointer;
+.site-header #menu.open {
+    display: block;
 }
 
-.nav__toggle::-webkit-details-marker {
-    display: none;
-}
-
-.nav__toggle:hover {
-    background-color: var(--color-surface);
-}
-
-/* Видимий фокус для клавіатури: Tab, потім Enter або Пробіл */
-.nav__toggle:focus-visible {
-    outline: 3px solid var(--color-bg);
-    outline-offset: 2px;
-}
-
-.nav details[open] > .nav__toggle {
-    margin-bottom: var(--space-sm);
-}
-
-.nav details > .menu {
+.menu__list {
     flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.nav .menu a {
+.menu a {
     display: flex;
     align-items: center;
     min-height: 44px;
 }
 
+.burger {
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+    font: inherit;
+    font-weight: bold;
+    color: var(--color-text);
+    background-color: var(--color-accent);
+    border: 0;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.burger:hover {
+    background-color: var(--color-surface);
+}
+
+.burger:focus-visible {
+    outline: 3px solid var(--color-bg);
+    outline-offset: 2px;
+}
+
 /* Планшет і вище: кнопка зникає, меню стає горизонтальним рядом */
 @media (min-width: 768px) {
-    .nav {
-        flex: 0 1 auto;
-    }
-
-    .nav__toggle {
+    .burger {
         display: none;
     }
 
-    .nav details > .menu {
+    .site-header #menu {
+        display: block;
+        flex: 0 1 auto;
+    }
+
+    .menu__list {
         flex-direction: row;
     }
 
-    .nav .menu a {
+    .menu a {
         display: block;
         min-height: 0;
     }

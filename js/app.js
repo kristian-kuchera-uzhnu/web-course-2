@@ -353,3 +353,24 @@ if (registrationForm) {
         showToast("Реєстрацію успішно надіслано");
     });
 }
+
+const burger = document.getElementById("burger");
+const menu = document.getElementById("menu");
+if (burger && menu) {
+    function setMenu(open) {
+        menu.classList.toggle("open", open);
+        burger.setAttribute("aria-expanded", String(open));
+    }
+
+    burger.addEventListener("click", () => {
+        setMenu(burger.getAttribute("aria-expanded") !== "true");
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setMenu(false);
+    });
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest("#menu") && !event.target.closest("#burger")) {
+            setMenu(false);
+        }
+    });
+}
