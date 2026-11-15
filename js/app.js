@@ -1,4 +1,5 @@
 // ===== Дані =====
+// Дані варіанта LR8; у LR10 записи буде винесено до зовнішнього JSON.
 // const забороняє лише перепризначити саму змінну recipes, а вміст масиву можна змінювати, тому push далі працюватиме.
 const recipes = [
     {
@@ -7,6 +8,7 @@ const recipes = [
         minutes: 120,
         calories: 180,
         category: "перші страви",
+        img: "images/borscht-card.jpg",
         details: { code: "RCP-0142", difficulty: "середня" },
         tags: ["борщ", "традиційна", "м’ясна"]
     },
@@ -16,6 +18,7 @@ const recipes = [
         minutes: 20,
         calories: 210,
         category: "сніданки",
+        img: "images/syrnyky-card.jpg",
         details: { code: "RCP-0143", difficulty: "легка" },
         tags: ["сир", "швидко"]
     },
@@ -25,6 +28,7 @@ const recipes = [
         minutes: 30,
         calories: 450,
         category: "основні страви",
+        img: "images/pasta-card.jpg",
         details: { code: "RCP-0144", difficulty: "середня" },
         tags: ["паста", "італійська", "бекон", "яйце"]
     },
@@ -34,6 +38,7 @@ const recipes = [
         minutes: 90,
         calories: 320,
         category: "випічка та десерти",
+        img: "images/cake-card.jpg",
         details: { code: "RCP-0145", difficulty: "складна" },
         tags: ["торт", "мед", "святкова"]
     },
@@ -43,6 +48,7 @@ const recipes = [
         minutes: 60,
         calories: 140,
         category: "перші страви",
+        img: "images/green-borscht-card.jpg",
         details: { code: "RCP-0146", difficulty: "легка" },
         tags: ["щавель", "весняна"]
     },
@@ -52,8 +58,39 @@ const recipes = [
         minutes: 40,
         calories: 250,
         category: "салати та закуски",
+        img: "images/salad-card.jpg",
         details: { code: "RCP-0148", difficulty: "легка" },
         tags: ["салат", "святкова", "класика", "овочі", "ковбаса"]
+    },
+    {
+        id: 7,
+        title: "Вареники з картоплею та смаженою цибулею",
+        minutes: 90,
+        calories: 260,
+        category: "основні страви",
+        img: "images/vareniky-card.jpg",
+        details: { code: "RCP-0147", difficulty: "середня" },
+        tags: ["вареники", "картопля", "цибуля"]
+    },
+    {
+        id: 8,
+        title: "Яблучний пиріг з корицею",
+        minutes: 70,
+        calories: 290,
+        category: "випічка та десерти",
+        img: "images/pie-card.jpg",
+        details: { code: "RCP-0149", difficulty: "середня" },
+        tags: ["яблуко", "пиріг", "кориця"]
+    },
+    {
+        id: 9,
+        title: "Налисники з сиром і ягідним соусом",
+        minutes: 35,
+        calories: 260,
+        category: "сніданки",
+        img: "images/crepes-card.jpg",
+        details: { code: "RCP-0150", difficulty: "легка" },
+        tags: ["сир", "млинці", "ягоди"]
     }
 ];
 
@@ -168,3 +205,51 @@ show("out-stats", [
 }
 
 console.log("app.js підключено"); // тимчасово, приберемо наприкінці
+
+function renderCards(list) {
+    const container = document.getElementById("cards");
+    if (!container) return;
+    container.replaceChildren();
+
+    for (const item of list) {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.dataset.id = item.id;
+
+        const badge = document.createElement("span");
+        badge.className = "card__badge";
+        badge.textContent = item.category;
+
+        const image = document.createElement("img");
+        image.className = "card__img";
+        image.src = item.img;
+        image.alt = item.title;
+        image.loading = "lazy";
+
+        const body = document.createElement("div");
+        body.className = "card__body";
+        const title = document.createElement("h3");
+        title.className = "card__title";
+        title.textContent = item.title;
+        const meta = document.createElement("p");
+        meta.className = "card__meta";
+        meta.textContent = `${item.category} · ${item.minutes} хв · ${item.calories} ккал`;
+        const id = document.createElement("p");
+        id.className = "card__id";
+        id.textContent = `Ідентифікатор: ${item.details.code}`;
+        body.append(title, meta, id);
+
+        const actions = document.createElement("div");
+        actions.className = "card__actions";
+        const action = document.createElement("button");
+        action.type = "button";
+        action.className = "card__action";
+        action.textContent = "Детальніше";
+        actions.append(action);
+
+        card.append(badge, image, body, actions);
+        container.append(card);
+    }
+}
+
+renderCards(recipes);
