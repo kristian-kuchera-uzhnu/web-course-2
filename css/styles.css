@@ -712,11 +712,36 @@ dialog button {
     cursor: pointer;
 }
 
-.dark-theme {
-  --color-bg: #1b2631;
-  --color-surface: #22313f;
-  --color-text: #eaeded;
-  --color-accent: #5dade2;
+:root.dark-theme {
+    color-scheme: dark;
+    --color-brand: #512e1f;
+    --color-accent: #5dade2;
+    --color-bg: #1b2631;
+    --color-surface: #22313f;
+    --color-text: #eaeded;
+    --color-muted: #bdc3c7;
+}
+
+:root.light-theme {
+    color-scheme: light;
+    --color-brand: hsl(14 65% 32%);
+    --color-accent: hsl(38 85% 50%);
+    --color-bg: hsl(30 40% 97%);
+    --color-surface: hsl(30 35% 92%);
+    --color-text: hsl(15 25% 15%);
+    --color-muted: hsl(20 15% 45%);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not(.dark-theme):not(.light-theme) {
+        color-scheme: dark;
+        --color-brand: #512e1f;
+        --color-accent: #5dade2;
+        --color-bg: #1b2631;
+        --color-surface: #22313f;
+        --color-text: #eaeded;
+        --color-muted: #bdc3c7;
+    }
 }
 
 

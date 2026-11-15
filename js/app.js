@@ -374,3 +374,27 @@ if (burger && menu) {
         }
     });
 }
+
+function isDark() {
+    const root = document.documentElement;
+    if (root.classList.contains("dark-theme")) return true;
+    if (root.classList.contains("light-theme")) return false;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+function applyTheme(dark) {
+    const root = document.documentElement;
+    root.classList.toggle("dark-theme", dark);
+    root.classList.toggle("light-theme", !dark);
+
+    const button = document.getElementById("theme");
+    if (!button) return;
+    button.setAttribute("aria-pressed", String(dark));
+    button.textContent = dark ? "☀️ Світла тема" : "🌙 Темна тема";
+}
+
+const themeButton = document.getElementById("theme");
+if (themeButton) {
+    applyTheme(isDark());
+    themeButton.addEventListener("click", () => applyTheme(!isDark()));
+}
