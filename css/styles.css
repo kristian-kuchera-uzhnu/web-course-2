@@ -52,7 +52,7 @@ iframe {
     --space-md: 1rem;
     --space-lg: 2rem;
     --card-width: 260px;
-        /* Макет */
+    /* Макет */
     --gap: 1.25rem;
     --min-col: 240px;
     --sidebar: 220px;
@@ -491,10 +491,15 @@ a:active {
     border-radius: 999px;
 }
 
+.card__badge--out {
+    background-color: var(--color-muted);
+    color: white;
+}
+
 /* z-index працює лише на елементах з position, тому шапці потрібні обидва:
    sticky її прилипає, а z-index тримає над картками, у яких теж є position.
    Пишемо body > header, щоб не зробити липкими header усередині статей. */
-body > header {
+body>header {
     padding: var(--space-sm) var(--space-md);
     background-color: var(--color-brand);
 }
@@ -502,14 +507,14 @@ body > header {
 /* На телефоні відкрите меню займало б пів екрана, тому шапка
    стає липкою з планшета */
 @media (min-width: 768px) {
-    body > header {
+    body>header {
         position: sticky;
         top: 0;
         z-index: 10;
     }
 }
 
-main > img {
+main>img {
     display: block;
     max-width: 100%;
     height: auto;
@@ -550,7 +555,8 @@ article header {
     display: grid;
     gap: var(--gap);
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto auto; /* росте main, щоб футер стояв унизу */
+    grid-template-rows: auto 1fr auto auto;
+    /* росте main, щоб футер стояв унизу */
     grid-template-areas:
         "nav"
         "main"
@@ -587,7 +593,8 @@ article header {
 
 .layout__main {
     grid-area: main;
-    min-width: 0; /* без цього широка таблиця розпирала б середню колонку */
+    min-width: 0;
+    /* без цього широка таблиця розпирала б середню колонку */
 }
 
 .layout__aside {
@@ -596,7 +603,8 @@ article header {
 
 .layout__footer {
     grid-area: foot;
-    margin-top: 0; /* відступ зверху вже дає gap сітки */
+    margin-top: 0;
+    /* відступ зверху вже дає gap сітки */
 }
 
 /* Бічні колонки */
@@ -634,8 +642,10 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    width: min(100%, 1200px); /* макет не розтягується на широких моніторах */
-    margin: 0 auto;           /* і стоїть по центру */
+    width: min(100%, 1200px);
+    /* макет не розтягується на широких моніторах */
+    margin: 0 auto;
+    /* і стоїть по центру */
     padding: var(--space-sm);
 }
 
@@ -828,13 +838,25 @@ dialog button {
 
 /* ===== Анімація появи модалки ===== */
 @keyframes fade {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes pop {
-    from { opacity: 0; transform: translateY(24px) scale(0.96); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* both = backwards + forwards: до початку анімації елемент стоїть у стані
@@ -876,7 +898,9 @@ dialog[open]::backdrop {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ===== Повага до prefers-reduced-motion ===== */
@@ -885,6 +909,7 @@ dialog[open]::backdrop {
    !important тут виправданий: правило має перебити будь-яку тривалість у
    будь-якому компоненті, а перелічувати їх усі й підтримувати список ніхто не буде. */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -897,6 +922,7 @@ dialog[open]::backdrop {
 
 /* Тонше правило для картки: замість руху лишаємо безпечний відгук рамкою */
 @media (prefers-reduced-motion: reduce) {
+
     .cards .card:hover,
     .cards .card:focus-within {
         transform: none;
@@ -920,6 +946,7 @@ dialog[open]::backdrop {
     border-radius: var(--radius);
     line-height: 1.7;
 }
+
 /* ===== Демонстрація: схлопування відступів ===== */
 /* Схлопування вертикальних відступів (margin collapse).
    Якщо розкоментувати блок нижче, відстань між абзацами .card__meta
@@ -955,6 +982,7 @@ dialog[open]::backdrop {
 }
 
 @media (max-width: 480px) {
+
     .controls input,
     .controls select {
         flex: 1 1 100%;

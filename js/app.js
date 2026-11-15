@@ -165,43 +165,43 @@ const statsForRecipes = (items) => {
 };
 // ===== Виведення на сторінку =====
 if (document.getElementById("demo")) {
-show("out-count", `Рецептів у каталозі: ${recipes.length}`);
-show("out-numbered", numberedList(recipes));
+    show("out-count", `Рецептів у каталозі: ${recipes.length}`);
+    show("out-numbered", numberedList(recipes));
 
-show("out-categories", recipes.map((r) => `${r.title} → ${categoryOf(r)}`));
+    show("out-categories", recipes.map((r) => `${r.title} → ${categoryOf(r)}`));
 
-const firstCourses = filterByCategory(recipes, "перші страви");
-const quick = filterByMinutesUpTo(recipes, 40);
-const none = filterByCategory(recipes, "морозиво");
+    const firstCourses = filterByCategory(recipes, "перші страви");
+    const quick = filterByMinutesUpTo(recipes, 40);
+    const none = filterByCategory(recipes, "морозиво");
 
-show("out-filter", [
-    `Категорія «перші страви»: знайдено ${firstCourses.length}`,
-    namesOf(firstCourses),
-    `Готуються до 40 хвилин: знайдено ${quick.length}`,
-    namesOf(quick),
-    `Категорія «морозиво»: знайдено ${none.length}`,
-    namesOf(none)
-]);
+    show("out-filter", [
+        `Категорія «перші страви»: знайдено ${firstCourses.length}`,
+        namesOf(firstCourses),
+        `Готуються до 40 хвилин: знайдено ${quick.length}`,
+        namesOf(quick),
+        `Категорія «морозиво»: знайдено ${none.length}`,
+        namesOf(none)
+    ]);
 
-show("out-sorted", [
-    "За часом приготування:",
-    ...withMinutes(sortByMinutes(recipes)),
-    "",
-    "За назвою (українська абетка):",
-    ...withMinutes(sortByTitle(recipes)),
-    "",
-    "Вихідний порядок (оригінал не змінено):",
-    ...withMinutes(recipes)
-]);
+    show("out-sorted", [
+        "За часом приготування:",
+        ...withMinutes(sortByMinutes(recipes)),
+        "",
+        "За назвою (українська абетка):",
+        ...withMinutes(sortByTitle(recipes)),
+        "",
+        "Вихідний порядок (оригінал не змінено):",
+        ...withMinutes(recipes)
+    ]);
 
-const stats = statsForRecipes(recipes);
-show("out-stats", [
-    `Рецептів: ${stats.count}`,
-    `Загальний час: ${stats.total} хв`,
-    `Середній час: ${stats.average} хв`,
-    `Найдовший рецепт: ${stats.max.title} — ${stats.max.minutes} хв`,
-    `Різних категорій: ${stats.categories}`
-]);
+    const stats = statsForRecipes(recipes);
+    show("out-stats", [
+        `Рецептів: ${stats.count}`,
+        `Загальний час: ${stats.total} хв`,
+        `Середній час: ${stats.average} хв`,
+        `Найдовший рецепт: ${stats.max.title} — ${stats.max.minutes} хв`,
+        `Різних категорій: ${stats.categories}`
+    ]);
 }
 
 console.log("app.js підключено"); // тимчасово, приберемо наприкінці
@@ -217,8 +217,9 @@ function renderCards(list) {
         card.dataset.id = item.id;
 
         const badge = document.createElement("span");
-        badge.className = "card__badge";
-        badge.textContent = item.category;
+        const quickRecipe = item.minutes <= 40;
+        badge.className = quickRecipe ? "card__badge" : "card__badge card__badge--out";
+        badge.textContent = quickRecipe ? "Швидко" : "Потрібен час";
 
         const image = document.createElement("img");
         image.className = "card__img";
@@ -273,6 +274,27 @@ if (searchInput && categoryFilter) {
 }
 
 renderCards(recipes);
+
+const cardsContainer = document.getElementById("cards");
+const detailsDialog = document.getElementById("details");
+if (cardsContainer && detailsDialog) {
+    // Один слухач на батьківському контейнері отримує спливаючі кліки і від карток після перемальовування.
+    cardsContainer.addEventListener("click", (event) => {
+        const card = event.target.closest(".card");
+        if (!card) return;
+
+        const recipe = recipes.find((item) => item.id === Number(card.dataset.id));
+        if (!recipe) return;
+
+        document.getElementById("d-title").textContent = recipe.title;
+        document.getElementById("d-line1").textContent = `Категорія: ${recipe.category}`;
+        document.getElementById("d-line2").textContent = `Приготування: ${recipe.minutes} хв · ${recipe.calories} ккал`;
+        document.getElementById("d-line3").textContent = `Код: ${recipe.details.code} · Складність: ${recipe.details.difficulty}`;
+        detailsDialog.showModal();
+    });
+
+    document.getElementById("d-close").addEventListener("click", () => detailsDialog.close());
+}
 
 let toastTimerId;
 function showToast(message) {
