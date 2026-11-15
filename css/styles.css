@@ -909,3 +909,32 @@ dialog[open]::backdrop {
 .card__meta { margin-bottom: 24px; }
 .card__id { margin-top: 16px; }
 */
+
+/* Керування динамічним каталогом LR9 */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-block: var(--space-md);
+}
+
+.controls input,
+.controls select {
+    max-width: 100%;
+    padding: var(--space-sm);
+    font: inherit;
+}
+
+.empty {
+    padding: var(--space-md);
+    background-color: var(--color-surface);
+    border-radius: var(--radius);
+}
+
+@media (max-width: 480px) {
+    .controls input,
+    .controls select {
+        flex: 1 1 100%;
+    }
+}

@@ -175,6 +175,20 @@
                     <div class="spinner" aria-hidden="true"></div>
                     <p>Завантажуємо каталог…</p>
                 </div>
+                <div class="controls">
+                    <label for="q">Пошук</label>
+                    <input type="search" id="q" placeholder="назва або категорія">
+                    <label for="filter">Категорія</label>
+                    <select id="filter">
+                        <option value="all">усі</option>
+                        <option value="перші страви">перші страви</option>
+                        <option value="сніданки">сніданки</option>
+                        <option value="основні страви">основні страви</option>
+                        <option value="випічка та десерти">випічка та десерти</option>
+                        <option value="салати та закуски">салати та закуски</option>
+                    </select>
+                </div>
+                <p id="empty" class="empty" hidden>Нічого не знайдено. Спробуйте інший запит.</p>
                 <div class="cards" id="cards"></div>
             </section>
             <section class="demo" id="demo">

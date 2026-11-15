@@ -252,4 +252,24 @@ function renderCards(list) {
     }
 }
 
+function applyFilters() {
+    const query = document.getElementById("q").value.trim().toLowerCase();
+    const category = document.getElementById("filter").value;
+    let result = recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(query) || recipe.category.toLowerCase().includes(query)
+    );
+    if (category !== "all") result = filterByCategory(result, category);
+
+    renderCards(result);
+    document.getElementById("empty").hidden = result.length > 0;
+}
+
+const searchInput = document.getElementById("q");
+const categoryFilter = document.getElementById("filter");
+if (searchInput && categoryFilter) {
+    // input спрацьовує під час кожного введення, тому результати оновлюються одразу.
+    searchInput.addEventListener("input", applyFilters);
+    categoryFilter.addEventListener("change", applyFilters);
+}
+
 renderCards(recipes);
