@@ -342,6 +342,17 @@ if (themeButton) {
     themeButton.addEventListener("click", () => applyTheme(!isDark()));
 }
 
+const loader = document.querySelector(".loader");
+if (loader) loader.hidden = false;
+
+// Показує людині причину помилки завантаження та підказує, що зробити.
+function showLoadError(error) {
+    const box = document.getElementById("load-error");
+    if (!box) return;
+    box.hidden = false;
+    box.textContent = `Не вдалося завантажити каталог. Перевір з’єднання й онови сторінку. Технічні подробиці: ${error.message}`;
+}
+
 // Завантажує рецепти для каталогу й запускає наявний пошук після отримання даних.
 async function init() {
     if (!document.getElementById("cards")) return;
@@ -350,7 +361,10 @@ async function init() {
         recipes = await loadData();
         applyFilters();
     } catch (error) {
-        console.error("Не вдалося завантажити дані каталогу:", error);
+        showLoadError(error);
+    } finally {
+        // finally ховає спінер і після успішного запиту, і після будь-якої помилки.
+        if (loader) loader.hidden = true;
     }
 }
 

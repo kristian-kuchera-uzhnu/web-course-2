@@ -1018,6 +1018,16 @@ dialog[open]::backdrop {
     display: none;
 }
 
+.load-error {
+    margin-block: var(--space-md);
+    padding: var(--space-md);
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border-left: 0.35rem solid var(--color-accent);
+    border-radius: var(--radius);
+    font-weight: 700;
+}
+
 /* BEGIN: розширений макет сторінки — цей блок можна прибрати для відкату */
 body {
     width: 100%;
