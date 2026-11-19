@@ -1,6 +1,31 @@
 // ===== Дані =====
 // Цей масив буде заповнено після завантаження data.json.
 let recipes = [];
+const FAVORITES_STORAGE_KEY = "smachnaKhataFavorites";
+const THEME_STORAGE_KEY = "smachnaKhataTheme";
+
+function loadFavorites() {
+    try {
+        const stored = localStorage.getItem(FAVORITES_STORAGE_KEY);
+        const parsed = stored ? JSON.parse(stored) : [];
+        return Array.isArray(parsed)
+            ? [...new Set(parsed.map(Number).filter((id) => Number.isInteger(id) && id > 0))]
+            : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveFavorites() {
+    try {
+        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+let favorites = loadFavorites();
 
 // Перевіряє HTTP-статус, бо fetch вважає 404 успішно отриманою відповіддю і не відхиляє Promise.
 async function loadData() {
@@ -182,7 +207,17 @@ function renderCards(list) {
         action.type = "button";
         action.className = "card__action";
         action.textContent = "Детальніше";
-        actions.append(action);
+
+        const favoriteButton = document.createElement("button");
+        const isFavorite = favorites.includes(item.id);
+        favoriteButton.type = "button";
+        favoriteButton.className = "favorite-toggle";
+        favoriteButton.dataset.id = item.id;
+        favoriteButton.setAttribute("aria-pressed", String(isFavorite));
+        favoriteButton.setAttribute("aria-label", isFavorite ? "Вилучити з обраного" : "Додати до обраного");
+        favoriteButton.title = isFavorite ? "Вилучити з обраного" : "Додати до обраного";
+        favoriteButton.textContent = isFavorite ? "♥" : "♡";
+        actions.append(favoriteButton, action);
 
         card.append(badge, image, body, actions);
         container.append(card);
@@ -213,11 +248,13 @@ function applyFilters() {
     const query = document.getElementById("q").value.trim().toLowerCase();
     const category = document.getElementById("filter").value;
     const sorting = document.getElementById("sort").value;
+    const favoritesOnly = document.getElementById("only-favorites").checked;
     let result = recipes.filter((recipe) =>
         recipe.dish.toLowerCase().includes(query) || recipe.type.toLowerCase().includes(query)
             || recipe.ingredients.join(" ").toLowerCase().includes(query)
     );
     if (category !== "all") result = filterByCategory(result, category);
+    if (favoritesOnly) result = result.filter((recipe) => favorites.includes(recipe.id));
 
     if (sorting === "name-asc") {
         result.sort((a, b) => a.dish.localeCompare(b.dish, "uk"));
@@ -235,11 +272,13 @@ function applyFilters() {
 const searchInput = document.getElementById("q");
 const categoryFilter = document.getElementById("filter");
 const sortSelect = document.getElementById("sort");
-if (searchInput && categoryFilter && sortSelect) {
+const favoritesOnlyFilter = document.getElementById("only-favorites");
+if (searchInput && categoryFilter && sortSelect && favoritesOnlyFilter) {
     // input спрацьовує під час кожного введення, тому результати оновлюються одразу.
     searchInput.addEventListener("input", applyFilters);
     categoryFilter.addEventListener("change", applyFilters);
     sortSelect.addEventListener("change", applyFilters);
+    favoritesOnlyFilter.addEventListener("change", applyFilters);
 }
 
 
@@ -310,6 +349,22 @@ function renderRecipeDetails(recipe) {
 if (cardsContainer && detailsDialog) {
     // Один слухач на батьківському контейнері отримує спливаючі кліки і від карток після перемальовування.
     cardsContainer.addEventListener("click", (event) => {
+        const favoriteButton = event.target.closest(".favorite-toggle");
+        if (favoriteButton) {
+            const recipeId = Number(favoriteButton.dataset.id);
+            const recipeExists = recipes.some((item) => item.id === recipeId);
+            if (!recipeExists) return;
+
+            if (favorites.includes(recipeId)) {
+                favorites = favorites.filter((id) => id !== recipeId);
+            } else {
+                favorites.push(recipeId);
+            }
+            if (!saveFavorites()) showToast("Не вдалося зберегти обране у цьому браузері.");
+            applyFilters();
+            return;
+        }
+
         const card = event.target.closest(".card");
         if (!card) return;
 
@@ -428,13 +483,34 @@ function isDark() {
     const root = document.documentElement;
     if (root.classList.contains("dark-theme")) return true;
     if (root.classList.contains("light-theme")) return false;
-    return false;
+    const savedTheme = loadThemePreference();
+    if (savedTheme !== null) return savedTheme === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
-function applyTheme(dark) {
+function loadThemePreference() {
+    try {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        return savedTheme === "dark" || savedTheme === "light" ? savedTheme : null;
+    } catch {
+        return null;
+    }
+}
+
+function saveThemePreference(dark) {
+    try {
+        localStorage.setItem(THEME_STORAGE_KEY, dark ? "dark" : "light");
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function applyTheme(dark, persist = true) {
     const root = document.documentElement;
     root.classList.toggle("dark-theme", dark);
     root.classList.toggle("light-theme", !dark);
+    if (persist) saveThemePreference(dark);
 
     const button = document.getElementById("theme");
     if (!button) return;
@@ -444,7 +520,8 @@ function applyTheme(dark) {
 
 const themeButton = document.getElementById("theme");
 if (themeButton) {
-    applyTheme(isDark());
+    const savedTheme = loadThemePreference();
+    applyTheme(savedTheme === null ? isDark() : savedTheme === "dark", false);
     themeButton.addEventListener("click", () => applyTheme(!isDark()));
 }
 

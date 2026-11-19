@@ -683,6 +683,18 @@ main {
     cursor: pointer;
 }
 
+.card__actions .favorite-toggle {
+    flex: 0 0 2.75rem;
+    padding-inline: 0.35rem;
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.card__actions .favorite-toggle[aria-pressed="true"] {
+    color: #b42318;
+    border-color: #b42318;
+}
+
 /* ===== Модальне вікно ===== */
 /* z-index тут не потрібен: showModal() виводить вікно в top layer, окремий шар
    браузера над усією сторінкою. Шапка з LR5 жила в одному шарі з картками і
@@ -966,6 +978,17 @@ dialog[open]::backdrop {
     min-width: 12rem;
 }
 
+.favorites-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.favorites-filter input {
+    width: auto;
+    margin: 0;
+}
+
 .empty {
     padding: var(--space-md);
     background-color: var(--color-surface);
@@ -978,6 +1001,10 @@ dialog[open]::backdrop {
     .controls select {
         flex: 1 1 100%;
         min-width: 0;
+    }
+
+    .favorites-filter {
+        min-height: 2.75rem;
     }
 }
 
