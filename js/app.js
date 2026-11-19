@@ -1,98 +1,6 @@
 // ===== Дані =====
-// Дані варіанта LR8; у LR10 записи буде винесено до зовнішнього JSON.
-// const забороняє лише перепризначити саму змінну recipes, а вміст масиву можна змінювати, тому push далі працюватиме.
-const recipes = [
-    {
-        id: 1,
-        title: "Український борщ з пампушками",
-        minutes: 120,
-        calories: 180,
-        category: "перші страви",
-        img: "images/borscht-card.jpg",
-        details: { code: "RCP-0142", difficulty: "середня" },
-        tags: ["борщ", "традиційна", "м’ясна"]
-    },
-    {
-        id: 2,
-        title: "Сирники зі сметаною",
-        minutes: 20,
-        calories: 210,
-        category: "сніданки",
-        img: "images/syrnyky-card.jpg",
-        details: { code: "RCP-0143", difficulty: "легка" },
-        tags: ["сир", "швидко"]
-    },
-    {
-        id: 3,
-        title: "Домашня паста карбонара",
-        minutes: 30,
-        calories: 450,
-        category: "основні страви",
-        img: "images/pasta-card.jpg",
-        details: { code: "RCP-0144", difficulty: "середня" },
-        tags: ["паста", "італійська", "бекон", "яйце"]
-    },
-    {
-        id: 4,
-        title: "Медовик",
-        minutes: 90,
-        calories: 320,
-        category: "випічка та десерти",
-        img: "images/cake-card.jpg",
-        details: { code: "RCP-0145", difficulty: "складна" },
-        tags: ["торт", "мед", "святкова"]
-    },
-    {
-        id: 5,
-        title: "Зелений борщ зі щавлем",
-        minutes: 60,
-        calories: 140,
-        category: "перші страви",
-        img: "images/green-borscht-card.jpg",
-        details: { code: "RCP-0146", difficulty: "легка" },
-        tags: ["щавель", "весняна"]
-    },
-    {
-        id: 6,
-        title: "Салат «Олів’є»",
-        minutes: 40,
-        calories: 250,
-        category: "салати та закуски",
-        img: "images/salad-card.jpg",
-        details: { code: "RCP-0148", difficulty: "легка" },
-        tags: ["салат", "святкова", "класика", "овочі", "ковбаса"]
-    },
-    {
-        id: 7,
-        title: "Вареники з картоплею та смаженою цибулею",
-        minutes: 90,
-        calories: 260,
-        category: "основні страви",
-        img: "images/vareniky-card.jpg",
-        details: { code: "RCP-0147", difficulty: "середня" },
-        tags: ["вареники", "картопля", "цибуля"]
-    },
-    {
-        id: 8,
-        title: "Яблучний пиріг з корицею",
-        minutes: 70,
-        calories: 290,
-        category: "випічка та десерти",
-        img: "images/pie-card.jpg",
-        details: { code: "RCP-0149", difficulty: "середня" },
-        tags: ["яблуко", "пиріг", "кориця"]
-    },
-    {
-        id: 9,
-        title: "Налисники <сирні> з ягідним соусом",
-        minutes: 35,
-        calories: 260,
-        category: "сніданки",
-        img: "images/crepes-card.jpg",
-        details: { code: "RCP-0150", difficulty: "легка" },
-        tags: ["сир", "млинці", "ягоди"]
-    }
-];
+// Цей масив буде заповнено після завантаження data.json.
+let recipes = [];
 
 // ===== Допоміжні функції =====
 // Записує текст у елемент з вказаним id. Масив рядків склеює переносами.
@@ -164,7 +72,8 @@ const statsForRecipes = (items) => {
     };
 };
 // ===== Виведення на сторінку =====
-if (document.getElementById("demo")) {
+// Оновлює демо після завантаження рецептів; виклик буде в init().
+function renderDemo() {
     show("out-count", `Рецептів у каталозі: ${recipes.length}`);
     show("out-numbered", numberedList(recipes));
 
@@ -203,8 +112,6 @@ if (document.getElementById("demo")) {
         `Різних категорій: ${stats.categories}`
     ]);
 }
-
-console.log("app.js підключено"); // тимчасово, приберемо наприкінці
 
 function renderCards(list) {
     const container = document.getElementById("cards");
@@ -273,7 +180,6 @@ if (searchInput && categoryFilter) {
     categoryFilter.addEventListener("change", applyFilters);
 }
 
-renderCards(recipes);
 
 const cardsContainer = document.getElementById("cards");
 const detailsDialog = document.getElementById("details");
