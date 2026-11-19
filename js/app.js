@@ -2,6 +2,21 @@
 // Цей масив буде заповнено після завантаження data.json.
 let recipes = [];
 
+// Перевіряє HTTP-статус, бо fetch вважає 404 успішно отриманою відповіддю і не відхиляє Promise.
+async function loadData() {
+    const response = await fetch("data.json");
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) {
+        throw new Error("Файл даних порожній або має неправильну структуру");
+    }
+
+    return data;
+}
+
 // ===== Допоміжні функції =====
 // Записує текст у елемент з вказаним id. Масив рядків склеює переносами.
 const show = (id, value) => {
@@ -326,3 +341,17 @@ if (themeButton) {
     applyTheme(isDark());
     themeButton.addEventListener("click", () => applyTheme(!isDark()));
 }
+
+// Завантажує рецепти для каталогу й запускає наявний пошук після отримання даних.
+async function init() {
+    if (!document.getElementById("cards")) return;
+
+    try {
+        recipes = await loadData();
+        applyFilters();
+    } catch (error) {
+        console.error("Не вдалося завантажити дані каталогу:", error);
+    }
+}
+
+init();
