@@ -159,11 +159,36 @@
                     </table>
                 </div>
             </section>
-            <dialog id="details">
+            <dialog id="details" class="details-dialog">
                 <h3 id="d-title"></h3>
-                <p id="d-line1"></p>
-                <p id="d-line2"></p>
-                <p id="d-line3"></p>
+                <div class="details-summary">
+                    <p id="d-type"></p>
+                    <p id="d-time"></p>
+                    <p id="d-difficulty"></p>
+                </div>
+                <section class="details-section" aria-labelledby="d-nutrition-title">
+                    <h4 id="d-nutrition-title">Харчова цінність</h4>
+                    <p id="d-nutrition"></p>
+                </section>
+                <section class="details-section" aria-labelledby="d-ingredients-title">
+                    <h4 id="d-ingredients-title">Інгредієнти</h4>
+                    <ul id="d-ingredients"></ul>
+                </section>
+                <section class="details-section" aria-labelledby="d-steps-title">
+                    <h4 id="d-steps-title">Приготування</h4>
+                    <ol id="d-steps"></ol>
+                </section>
+                <section class="details-section" aria-labelledby="d-variations-title">
+                    <h4 id="d-variations-title">Варіанти рецепта</h4>
+                    <div class="details-table-wrap">
+                        <table class="details-table">
+                            <thead>
+                                <tr><th scope="col">Назва</th><th scope="col">Зміна</th></tr>
+                            </thead>
+                            <tbody id="d-variations"></tbody>
+                        </table>
+                    </div>
+                </section>
                 <button id="d-close" type="button">Закрити</button>
             </dialog>
             <section class="catalog">

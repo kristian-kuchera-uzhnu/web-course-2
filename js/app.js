@@ -214,6 +214,68 @@ if (searchInput && categoryFilter) {
 
 const cardsContainer = document.getElementById("cards");
 const detailsDialog = document.getElementById("details");
+
+function fillDetailList(container, values, emptyMessage, getText) {
+    container.replaceChildren();
+    if (!Array.isArray(values) || values.length === 0) {
+        const emptyItem = document.createElement("li");
+        emptyItem.className = "details-empty";
+        emptyItem.textContent = emptyMessage;
+        container.append(emptyItem);
+        return;
+    }
+
+    for (const value of values) {
+        const listItem = document.createElement("li");
+        listItem.textContent = getText(value);
+        container.append(listItem);
+    }
+}
+
+function renderRecipeDetails(recipe) {
+    document.getElementById("d-title").textContent = recipe.dish;
+    document.getElementById("d-type").textContent = `Тип: ${recipe.type}`;
+    document.getElementById("d-time").textContent = `Час приготування: ${recipe.cook_time_min.toLocaleString("uk-UA")} хв`;
+    document.getElementById("d-difficulty").textContent = `Складність: ${recipe.difficulty}`;
+
+    const nutrition = recipe.nutrition || {};
+    const calories = Number(nutrition.calories || 0).toLocaleString("uk-UA");
+    const proteins = Number(nutrition.proteins_g || 0).toLocaleString("uk-UA");
+    const carbs = Number(nutrition.carbs_g || 0).toLocaleString("uk-UA");
+    const fat = Number(nutrition.fat_g || 0).toLocaleString("uk-UA");
+    document.getElementById("d-nutrition").textContent =
+        `Калорії: ${calories} ккал · Білки: ${proteins} г · Вуглеводи: ${carbs} г · Жири: ${fat} г`;
+
+    fillDetailList(document.getElementById("d-ingredients"), recipe.ingredients,
+        "Список інгредієнтів порожній.", (ingredient) => String(ingredient));
+    fillDetailList(document.getElementById("d-steps"), recipe.steps,
+        "Кроки приготування не додані.", (step) => String(step));
+
+    const variationsBody = document.getElementById("d-variations");
+    variationsBody.replaceChildren();
+    if (!Array.isArray(recipe.variations) || recipe.variations.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.className = "details-empty";
+        cell.colSpan = 2;
+        cell.textContent = "Варіантів рецепта немає.";
+        row.append(cell);
+        variationsBody.append(row);
+        return;
+    }
+
+    for (const variation of recipe.variations) {
+        const row = document.createElement("tr");
+        const nameCell = document.createElement("th");
+        nameCell.scope = "row";
+        nameCell.textContent = String(variation.name ?? "");
+        const changeCell = document.createElement("td");
+        changeCell.textContent = String(variation.change ?? "");
+        row.append(nameCell, changeCell);
+        variationsBody.append(row);
+    }
+}
+
 if (cardsContainer && detailsDialog) {
     // Один слухач на батьківському контейнері отримує спливаючі кліки і від карток після перемальовування.
     cardsContainer.addEventListener("click", (event) => {
@@ -223,10 +285,7 @@ if (cardsContainer && detailsDialog) {
         const recipe = recipes.find((item) => item.id === Number(card.dataset.id));
         if (!recipe) return;
 
-        document.getElementById("d-title").textContent = recipe.dish;
-        document.getElementById("d-line1").textContent = `Тип: ${recipe.type}`;
-        document.getElementById("d-line2").textContent = `Приготування: ${recipe.cook_time_min.toLocaleString("uk-UA")} хв · ${recipe.nutrition.calories.toLocaleString("uk-UA")} ккал`;
-        document.getElementById("d-line3").textContent = `Складність: ${recipe.difficulty}`;
+        renderRecipeDetails(recipe);
         detailsDialog.showModal();
     });
 
