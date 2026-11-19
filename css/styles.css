@@ -962,6 +962,10 @@ dialog[open]::backdrop {
     font: inherit;
 }
 
+.controls select {
+    min-width: 12rem;
+}
+
 .empty {
     padding: var(--space-md);
     background-color: var(--color-surface);
@@ -973,6 +977,7 @@ dialog[open]::backdrop {
     .controls input,
     .controls select {
         flex: 1 1 100%;
+        min-width: 0;
     }
 }
 

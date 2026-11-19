@@ -189,14 +189,43 @@ function renderCards(list) {
     }
 }
 
+function populateCategoryOptions() {
+    const categoryFilter = document.getElementById("filter");
+    if (!categoryFilter) return;
+
+    categoryFilter.replaceChildren();
+    const allOption = document.createElement("option");
+    allOption.value = "all";
+    allOption.textContent = "усі категорії";
+    categoryFilter.append(allOption);
+
+    const categories = [...new Set(recipes.map((recipe) => recipe.type))]
+        .sort((a, b) => a.localeCompare(b, "uk"));
+    for (const category of categories) {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.append(option);
+    }
+}
+
 function applyFilters() {
     const query = document.getElementById("q").value.trim().toLowerCase();
     const category = document.getElementById("filter").value;
+    const sorting = document.getElementById("sort").value;
     let result = recipes.filter((recipe) =>
         recipe.dish.toLowerCase().includes(query) || recipe.type.toLowerCase().includes(query)
             || recipe.ingredients.join(" ").toLowerCase().includes(query)
     );
     if (category !== "all") result = filterByCategory(result, category);
+
+    if (sorting === "name-asc") {
+        result.sort((a, b) => a.dish.localeCompare(b.dish, "uk"));
+    } else if (sorting === "time-asc") {
+        result.sort((a, b) => a.cook_time_min - b.cook_time_min);
+    } else if (sorting === "time-desc") {
+        result.sort((a, b) => b.cook_time_min - a.cook_time_min);
+    }
 
     renderCards(result);
     document.getElementById("empty").hidden = result.length > 0;
@@ -205,10 +234,12 @@ function applyFilters() {
 
 const searchInput = document.getElementById("q");
 const categoryFilter = document.getElementById("filter");
-if (searchInput && categoryFilter) {
+const sortSelect = document.getElementById("sort");
+if (searchInput && categoryFilter && sortSelect) {
     // input спрацьовує під час кожного введення, тому результати оновлюються одразу.
     searchInput.addEventListener("input", applyFilters);
     categoryFilter.addEventListener("change", applyFilters);
+    sortSelect.addEventListener("change", applyFilters);
 }
 
 
@@ -435,6 +466,7 @@ async function init() {
     try {
         const data = await loadData();
         recipes = data.map((recipe, index) => ({ ...recipe, id: index + 1 }));
+        populateCategoryOptions();
         applyFilters();
         renderDemo();
     } catch (error) {
