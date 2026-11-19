@@ -28,62 +28,63 @@ const show = (id, value) => {
     box.textContent = Array.isArray(value) ? value.join("\n") : value;
 };
 // ===== Функції обробки =====
-// Приймає масив рецептів, повертає масив рядків «1. Назва — категорія, ккал (код)».
+// Формує короткий список назв із типом, калорійністю та складністю рецептів.
 const numberedList = (items) => {
     const lines = [];
     for (let i = 0; i < items.length; i++) {
         const item = items[i];
-        lines.push(`${i + 1}. ${item.title} — ${item.category}, ${item.calories} ккал (${item.details.code})`);
+        const calories = item.nutrition.calories.toLocaleString("uk-UA");
+        lines.push(`${i + 1}. ${item.dish} — ${item.type}, ${calories} ккал (${item.difficulty})`);
     }
     return lines;
 };
 
 // Приймає рецепт, повертає назву групи за категорією (switch із групуванням case).
 function categoryOf(recipe) {
-    switch (recipe.category) {
-        case "перші страви":
-        case "основні страви":
+    switch (recipe.type) {
+        case "суп":
+        case "гаряче":
             return "Гарячі страви";
-        case "випічка та десерти":
-        case "сніданки":
-            return "Випічка та сніданки";
+        case "випічка":
+        case "десерт":
+            return "Випічка та десерти";
         default:
             return "Холодні страви й закуски";
     }
 }
 
 // Приймає масив і категорію, повертає рецепти з точно такою категорією.
-const filterByCategory = (items, value) => items.filter((r) => r.category === value);
+const filterByCategory = (items, value) => items.filter((r) => r.type === value);
 
 // Приймає масив і ліміт, повертає рецепти, які готуються не довше ніж maxMinutes хвилин.
-const filterByMinutesUpTo = (items, maxMinutes) => items.filter((r) => r.minutes <= maxMinutes);
+const filterByMinutesUpTo = (items, maxMinutes) => items.filter((r) => r.cook_time_min <= maxMinutes);
 
 // Приймає масив рецептів, повертає рядок зі списком назв або «нічого не знайдено».
 const namesOf = (items) =>
-    items.length > 0 ? items.map((r) => `  • ${r.title}`).join("\n") : "  нічого не знайдено";
+    items.length > 0 ? items.map((r) => `  • ${r.dish}`).join("\n") : "  нічого не знайдено";
 
 // Приймає масив, повертає НОВИЙ масив, відсортований за часом приготування (за зростанням).
-const sortByMinutes = (items) => [...items].sort((a, b) => a.minutes - b.minutes);
+const sortByMinutes = (items) => [...items].sort((a, b) => a.cook_time_min - b.cook_time_min);
 
 // Приймає масив, повертає НОВИЙ масив, відсортований за назвою в українській абетці.
-const sortByTitle = (items) => [...items].sort((a, b) => a.title.localeCompare(b.title, "uk"));
+const sortByTitle = (items) => [...items].sort((a, b) => a.dish.localeCompare(b.dish, "uk"));
 
 // Приймає масив рецептів, повертає масив рядків «назва (N хв)».
-const withMinutes = (items) => items.map((r) => `${r.title} (${r.minutes} хв)`);
+const withMinutes = (items) => items.map((r) => `${r.dish} (${r.cook_time_min.toLocaleString("uk-UA")} хв)`);
 
 // Приймає масив рецептів, повертає об’єкт зі статистикою за часом приготування.
 const statsForRecipes = (items) => {
     // 0 — початкове значення суми. Без нього першим «накопичувачем» став би
     // сам об’єкт-рецепт, і додавання дало б рядок «[object Object]20…»
     // замість числа (а на порожньому масиві було б ще й TypeError).
-    const total = items.reduce((sum, r) => sum + r.minutes, 0);
-    const longest = items.reduce((best, r) => (r.minutes > best.minutes ? r : best), items[0]);
+    const total = items.reduce((sum, r) => sum + r.cook_time_min, 0);
+    const longest = items.reduce((best, r) => (r.cook_time_min > best.cook_time_min ? r : best), items[0]);
     return {
         count: items.length,
         total: total,
         average: (total / items.length).toFixed(1),
         max: longest,
-        categories: new Set(items.map((r) => r.category)).size
+        categories: new Set(items.map((r) => r.type)).size
     };
 };
 // ===== Виведення на сторінку =====
@@ -92,14 +93,15 @@ function renderDemo() {
     show("out-count", `Рецептів у каталозі: ${recipes.length}`);
     show("out-numbered", numberedList(recipes));
 
-    show("out-categories", recipes.map((r) => `${r.title} → ${categoryOf(r)}`));
+    show("out-categories", recipes.map((r) => `${r.dish} → ${categoryOf(r)}`));
 
-    const firstCourses = filterByCategory(recipes, "перші страви");
+    const firstType = recipes[0]?.type;
+    const firstCourses = filterByCategory(recipes, firstType);
     const quick = filterByMinutesUpTo(recipes, 40);
     const none = filterByCategory(recipes, "морозиво");
 
     show("out-filter", [
-        `Категорія «перші страви»: знайдено ${firstCourses.length}`,
+        `Категорія «${firstType}»: знайдено ${firstCourses.length}`,
         namesOf(firstCourses),
         `Готуються до 40 хвилин: знайдено ${quick.length}`,
         namesOf(quick),
@@ -123,7 +125,7 @@ function renderDemo() {
         `Рецептів: ${stats.count}`,
         `Загальний час: ${stats.total} хв`,
         `Середній час: ${stats.average} хв`,
-        `Найдовший рецепт: ${stats.max.title} — ${stats.max.minutes} хв`,
+        `Найдовший рецепт: ${stats.max.dish} — ${stats.max.cook_time_min} хв`,
         `Різних категорій: ${stats.categories}`
     ]);
 }
@@ -133,33 +135,45 @@ function renderCards(list) {
     if (!container) return;
     container.replaceChildren();
 
+    const cardImages = [
+        "images/borscht-card.jpg",
+        "images/pasta-card.jpg",
+        "images/salad-card.jpg",
+        "images/hero-dish.jpg",
+        "images/green-borscht-card.jpg",
+        "images/vareniky-card.jpg",
+        "images/syrnyky-card.jpg",
+        "images/salad-card.jpg",
+        "images/pie-card.jpg",
+        "images/cake-card.jpg"
+    ];
     for (const item of list) {
         const card = document.createElement("article");
         card.className = "card";
         card.dataset.id = item.id;
 
         const badge = document.createElement("span");
-        const quickRecipe = item.minutes <= 40;
+        const quickRecipe = item.cook_time_min <= 40;
         badge.className = quickRecipe ? "card__badge" : "card__badge card__badge--out";
         badge.textContent = quickRecipe ? "Швидко" : "Потрібен час";
 
         const image = document.createElement("img");
         image.className = "card__img";
-        image.src = item.img;
-        image.alt = item.title;
+        image.src = cardImages[item.id - 1] || "images/hero-dish.jpg";
+        image.alt = item.dish;
         image.loading = "lazy";
 
         const body = document.createElement("div");
         body.className = "card__body";
         const title = document.createElement("h3");
         title.className = "card__title";
-        title.textContent = item.title;
+        title.textContent = item.dish;
         const meta = document.createElement("p");
         meta.className = "card__meta";
-        meta.textContent = `${item.category} · ${item.minutes} хв · ${item.calories} ккал`;
+        meta.textContent = `${item.type} · ${item.cook_time_min.toLocaleString("uk-UA")} хв · ${item.nutrition.calories.toLocaleString("uk-UA")} ккал`;
         const id = document.createElement("p");
         id.className = "card__id";
-        id.textContent = `Ідентифікатор: ${item.details.code}`;
+        id.textContent = `Рецепт № ${item.id} · ${item.difficulty} · інгредієнтів: ${item.ingredients.length} · варіантів: ${item.variations.length}`;
         body.append(title, meta, id);
 
         const actions = document.createElement("div");
@@ -179,12 +193,14 @@ function applyFilters() {
     const query = document.getElementById("q").value.trim().toLowerCase();
     const category = document.getElementById("filter").value;
     let result = recipes.filter((recipe) =>
-        recipe.title.toLowerCase().includes(query) || recipe.category.toLowerCase().includes(query)
+        recipe.dish.toLowerCase().includes(query) || recipe.type.toLowerCase().includes(query)
+            || recipe.ingredients.join(" ").toLowerCase().includes(query)
     );
     if (category !== "all") result = filterByCategory(result, category);
 
     renderCards(result);
     document.getElementById("empty").hidden = result.length > 0;
+    document.getElementById("count").textContent = `Показано ${result.length} із ${recipes.length}`;
 }
 
 const searchInput = document.getElementById("q");
@@ -207,10 +223,10 @@ if (cardsContainer && detailsDialog) {
         const recipe = recipes.find((item) => item.id === Number(card.dataset.id));
         if (!recipe) return;
 
-        document.getElementById("d-title").textContent = recipe.title;
-        document.getElementById("d-line1").textContent = `Категорія: ${recipe.category}`;
-        document.getElementById("d-line2").textContent = `Приготування: ${recipe.minutes} хв · ${recipe.calories} ккал`;
-        document.getElementById("d-line3").textContent = `Код: ${recipe.details.code} · Складність: ${recipe.details.difficulty}`;
+        document.getElementById("d-title").textContent = recipe.dish;
+        document.getElementById("d-line1").textContent = `Тип: ${recipe.type}`;
+        document.getElementById("d-line2").textContent = `Приготування: ${recipe.cook_time_min.toLocaleString("uk-UA")} хв · ${recipe.nutrition.calories.toLocaleString("uk-UA")} ккал`;
+        document.getElementById("d-line3").textContent = `Складність: ${recipe.difficulty}`;
         detailsDialog.showModal();
     });
 
@@ -322,7 +338,7 @@ function isDark() {
     const root = document.documentElement;
     if (root.classList.contains("dark-theme")) return true;
     if (root.classList.contains("light-theme")) return false;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return false;
 }
 
 function applyTheme(dark) {
@@ -358,8 +374,10 @@ async function init() {
     if (!document.getElementById("cards")) return;
 
     try {
-        recipes = await loadData();
+        const data = await loadData();
+        recipes = data.map((recipe, index) => ({ ...recipe, id: index + 1 }));
         applyFilters();
+        renderDemo();
     } catch (error) {
         showLoadError(error);
     } finally {
